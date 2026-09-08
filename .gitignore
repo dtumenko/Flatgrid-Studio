@@ -1,0 +1,13 @@
+# Build output — regenerate with `python build-demo.py`
+review-demo.html
+
+# Source photographs, kept on disk for reprocessing but not shipped.
+# The site uses assets/director.jpg and assets/studio.jpg, made from these.
+assets/Warm Edit-5.jpg
+assets/background.jpg
+
+# OS and editor litter
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact — Start a Project | Flatgrid Studio</title>
+<meta name="description" content="Tell Flatgrid Studio about your project — brand identity, UI/UX, editorial design, creative direction or web development. We reply within two working days.">
+<meta name="theme-color" content="#141415">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Contact — Start a Project | Flatgrid Studio">
+<meta property="og:description" content="Tell Flatgrid Studio about your project — brand identity, UI/UX, editorial design, creative direction or web development. We reply within two working days.">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/logo-mark.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap">
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/pages.css">
+<script>document.documentElement.className='js';try{var x=sessionStorage.getItem('fg:xfade');if(x){var c=document.documentElement.classList;c.add('is-arriving');if(x==='ink')c.add('is-ink')}}catch(e){}</script>
+</head>
+<body class="page-sheet page-contact">
+
+<!-- the menu's panels, held across a page change -->
+<div class="curtain" id="curtain" aria-hidden="true">
+  <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i>
+  <i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i>
+</div>
+
+<a class="logo" href="index.html" aria-label="Flatgrid Studio — home">
+  <img class="logo__wordmark" src="assets/logo-wordmark.svg" alt="Flatgrid Studio" width="200" height="125">
+  <img class="logo__mark" src="assets/logo-mark-menu.svg" alt="" aria-hidden="true" width="513" height="304">
+</a>
+
+<button class="menu" type="button" id="menuBtn" aria-expanded="false" aria-controls="nav">
+  <span class="menu__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span class="menu__label">
+    <span class="menu__word menu__word--open">Menu</span>
+    <span class="menu__word menu__word--close" aria-hidden="true">Close</span>
+  </span>
+</button>
+
+<main class="sheet">
+  <span class="cols" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+
+  <header class="sheet__head">
+    <p class="sheet__eyebrow up">Contact</p>
+    <h1 class="sheet__title mask up"><span>Start a project</span></h1>
+    <p class="sheet__lead up d1">Tell us what you are making and where it is going.
+      A sentence about the problem is worth more than a full brief — we will come
+      back with questions either way.</p>
+  </header>
+
+  <div class="contact">
+    <div class="contact__aside">
+      <dl class="detail up">
+        <dt>Email</dt>
+        <dd><a href="mailto:flatgrid.studio@gmail.com">flatgrid.studio@gmail.com</a></dd>
+      </dl>
+      <dl class="detail detail--links up d1">
+        <dt>Elsewhere</dt>
+        <dd>
+          <a href="https://www.behance.net/flatgrid" target="_blank" rel="noopener noreferrer">Behance</a>
+          <a href="https://www.linkedin.com/company/flatgrid-studio" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://www.instagram.com/flatgrid.studio" target="_blank" rel="noopener noreferrer">Instagram</a>
+        </dd>
+      </dl>
+      <dl class="detail up d2">
+        <dt>Reply</dt>
+        <dd>Within two working days.</dd>
+      </dl>
+    </div>
+
+    <!-- Paste a Formspree endpoint into action= to make this POST. Until then
+         js/pages.js hands the filled-in message to the visitor's mail client,
+         so the button is never dead. See the README. -->
+    <form class="contact__form" id="contactForm" method="POST"
+          action="https://formspree.io/f/YOUR_FORM_ID">
+
+      <div class="field up">
+        <label for="f-name">Name</label>
+        <input id="f-name" name="name" type="text" placeholder="Your name"
+               autocomplete="name" required>
+      </div>
+
+      <div class="field up">
+        <label for="f-email">Email</label>
+        <input id="f-email" name="email" type="email" placeholder="you@company.com"
+               autocomplete="email" required>
+      </div>
+
+      <div class="field up">
+        <label for="f-company">Company <em>&mdash; optional</em></label>
+        <input id="f-company" name="company" type="text" placeholder="Where you work"
+               autocomplete="organization">
+      </div>
+
+      <div class="field up">
+        <label for="f-project">What it is</label>
+        <select id="f-project" name="project" required>
+          <option value="Brand identity design">Brand identity design</option>
+          <option value="UI/UX design">UI/UX design</option>
+          <option value="Editorial design">Editorial design</option>
+          <option value="Creative direction">Creative direction</option>
+          <option value="Web development">Web development</option>
+          <option value="Something else">Something else</option>
+        </select>
+      </div>
+
+      <div class="field up">
+        <label for="f-message">The project</label>
+        <textarea id="f-message" name="message" rows="5" required
+                  placeholder="What you are making, who it is for, and when you need it."></textarea>
+      </div>
+
+      <button class="form__send" type="submit">Send it<svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" focusable="false"><path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button>
+      <p class="form__note" id="formNote" role="status" hidden></p>
+    </form>
+  </div>
+</main>
+
+<!-- ─────────────────────────────   NAV   ───────────────────────────── -->
+<nav class="nav" id="nav" aria-hidden="true" aria-label="Main">
+  <div class="nav__panels" aria-hidden="true">
+    <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i>
+    <i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i>
+  </div>
+  <div class="nav__grid" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <ul class="nav__list">
+    <li><a href="work.html">Work</a></li>
+    <li><a href="studio.html">Studio</a></li>
+    <li><a href="academy.html">Flatgrid Academy</a></li>
+    <li><a href="templates.html">Design Templates</a></li>
+    <li><a href="contact.html" aria-current="page">Contact</a></li>
+  </ul>
+  <p class="nav__foot"><a href="mailto:flatgrid.studio@gmail.com">flatgrid.studio@gmail.com</a></p>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/pages.js"></script>
+</body>
+</html>

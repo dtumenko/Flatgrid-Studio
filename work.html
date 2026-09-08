@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Work — Flatgrid Studio</title>
+<meta name="description" content="Selected work from Flatgrid Studio — branding, visual identity, web design, art direction and editorial design.">
+<meta name="theme-color" content="#141415">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/logo-mark.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap">
+
+<link rel="preload" as="image" href="assets/work-vellor.jpg" fetchpriority="high">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/work.css">
+<script>document.documentElement.className='js';try{var x=sessionStorage.getItem('fg:xfade');if(x){var c=document.documentElement.classList;c.add('is-arriving');if(x==='ink')c.add('is-ink')}}catch(e){}</script>
+</head>
+<body class="page-work">
+
+<!-- the menu's panels, held across a page change -->
+<div class="curtain" id="curtain" aria-hidden="true">
+  <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i>
+  <i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i>
+</div>
+
+<!-- the home page's six-column field -->
+<div class="grid grid--fixed" aria-hidden="true">
+  <span class="grid__rule"></span><span class="grid__rule"></span><span class="grid__rule"></span>
+  <span class="grid__rule"></span><span class="grid__rule"></span>
+</div>
+
+<a class="logo" href="index.html" aria-label="Flatgrid Studio — home">
+  <img class="logo__wordmark" src="assets/logo-wordmark.svg" alt="Flatgrid Studio" width="200" height="125">
+  <img class="logo__mark" src="assets/logo-mark-menu.svg" alt="" aria-hidden="true" width="513" height="304">
+</a>
+
+<button class="menu" type="button" id="menuBtn" aria-expanded="false" aria-controls="nav">
+  <span class="menu__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span class="menu__label">
+    <span class="menu__word menu__word--open">Menu</span>
+    <span class="menu__word menu__word--close" aria-hidden="true">Close</span>
+  </span>
+</button>
+
+<!-- ─────────────────────────────  REEL  ─────────────────────────────
+     Words on the left third, photograph pinned across the right two
+     thirds. The photograph holds while the words pass, then resolves
+     into the next project. -->
+<main class="reel" id="reel">
+
+  <ol class="reel__list">
+      <li class="slide" id="vellor" style="--img:url(../assets/work-vellor-m.jpg)">
+        <h2 class="slide__name">Vellor Residency</h2>
+        <ul class="slide__tags slide__tags--plain">
+          <li>Branding</li>
+          <li>Visual identity</li>
+          <li>Art direction</li>
+        </ul>
+        <p class="slide__desc">Vellor Residency is a contemporary residential development designed for modern urban living — a gated complex offering luxury apartments, private amenities, and rooftop penthouses, set for completion in 2028. The brief called for a brand identity that communicates architectural clarity.</p>
+        <span class="slide__foot">
+          <span class="slide__year"><time datetime="2026">2026</time></span>
+          <span class="slide__by">Flatgrid Studio</span>
+        </span>
+        <a class="slide__go" data-xfade="none" href="project-vellor.html">Open project<svg viewBox="0 0 20 20" width="13" height="13" aria-hidden="true" focusable="false"><path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+      </li>
+      <li class="slide" id="pletho" style="--img:url(../assets/work-pletho-m.jpg)">
+        <h2 class="slide__name">Pletho</h2>
+        <ul class="slide__tags slide__tags--plain">
+          <li>Branding</li>
+          <li>Art direction</li>
+          <li>Web design</li>
+        </ul>
+        <p class="slide__desc">Pletho is a medical device firm focused on making life easier for people with fine motor and dexterity challenges.</p>
+        <span class="slide__foot">
+          <span class="slide__year"><time datetime="2026">2026</time></span>
+          <span class="slide__by">Flatgrid Studio</span>
+        </span>
+        <a class="slide__go" data-xfade="none" href="project-pletho.html">Open project<svg viewBox="0 0 20 20" width="13" height="13" aria-hidden="true" focusable="false"><path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+      </li>
+      <li class="slide" id="nordarch" style="--img:url(../assets/work-nordarch-m.jpg)">
+        <h2 class="slide__name">Nordarch</h2>
+        <ul class="slide__tags slide__tags--plain">
+          <li>Visual identity</li>
+          <li>Editorial design</li>
+          <li>Web design</li>
+        </ul>
+        <p class="slide__desc">Nordarch is an architecture studio working across residential and cultural projects.</p>
+        <span class="slide__foot">
+          <span class="slide__year"><time datetime="2026">2026</time></span>
+          <span class="slide__by">Flatgrid Studio</span>
+        </span>
+        <a class="slide__go" data-xfade="none" href="project-nordarch.html">Open project<svg viewBox="0 0 20 20" width="13" height="13" aria-hidden="true" focusable="false"><path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+      </li>
+  </ol>
+
+  <div class="reel__col">
+    <div class="reel__stage">
+      <div class="reel__shots">
+      <figure class="shot" data-href="project-vellor.html" data-name="Vellor Residency">
+        <img src="assets/work-vellor.jpg" alt="Vellor Residency hoarding on a construction site, reading Everything, Within." width="2000" height="1179" loading="eager" fetchpriority="high" decoding="async">
+      </figure>
+      <figure class="shot" data-href="project-pletho.html" data-name="Pletho">
+        <img src="assets/work-pletho.jpg" alt="Pletho poster campaign on a street-side display, reading Your Dignity Restored." width="2000" height="1179" loading="lazy" decoding="async">
+      </figure>
+      <figure class="shot" data-href="project-nordarch.html" data-name="Nordarch">
+        <img src="assets/work-nordarch.jpg" alt="Nordarch branded drawing tubes in blue and black on a dark surface." width="2000" height="1179" loading="lazy" decoding="async">
+      </figure>
+      </div>
+      <span class="reel__grain" aria-hidden="true"></span>
+      <a class="reel__link" id="reelLink" data-xfade="none" href="project-vellor.html" aria-label="Open Vellor Residency">
+        <span class="reel__go">
+          View project
+          <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" focusable="false">
+            <path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor"
+                  stroke-width="1.9" stroke-linecap="square"/>
+          </svg>
+        </span>
+      </a>
+      <p class="count" aria-hidden="true"><span id="countNow">01</span><i></i><span class="count__all">03</span></p>
+    </div>
+  </div>
+
+</main>
+
+<!-- ─────────────────────────────   NAV   ───────────────────────────── -->
+<nav class="nav" id="nav" aria-hidden="true" aria-label="Main">
+  <div class="nav__panels" aria-hidden="true">
+    <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i>
+    <i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i>
+  </div>
+  <div class="nav__grid" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <ul class="nav__list">
+    <li><a href="work.html" aria-current="page">Work</a></li>
+    <li><a href="studio.html">Studio</a></li>
+    <li><a href="academy.html">Flatgrid Academy</a></li>
+    <li><a href="templates.html">Design Templates</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <p class="nav__foot"><a href="mailto:flatgrid.studio@gmail.com">flatgrid.studio@gmail.com</a></p>
+</nav>
+
+<div class="cursor" id="cursor" aria-hidden="true">View project</div>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/work.js"></script>
+</body>
+</html>

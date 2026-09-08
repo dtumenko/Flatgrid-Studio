@@ -1,0 +1,797 @@
+/* =============================================================
+   FLATGRID STUDIO — hero
+   Brand: Neue Haas Grotesk (display) · Roboto (UI) · #FF7546
+   ============================================================= */
+
+/* ---------- tokens ---------- */
+:root{
+  /* brand */
+  --ink:      #141415;
+  --ink-vid:  #141414;              /* the black the loader MP4 renders */
+  --ink-2:    #0d0d0e;
+  --paper:    #FBF8F3;
+  --accent:   #FF7546;
+  --white:    #ffffff;      /* the menu page ground */
+
+  --line:     rgba(251,248,243,.15);
+  --line-2:   rgba(251,248,243,.26);
+  --muted:    rgba(251,248,243,.52);
+
+  /* type */
+  --display: "Neue Haas Grotesk Display Pro","NeueHaasGroteskDisp Pro",
+             "Neue Haas Grotesk Display","Helvetica Neue","Inter",
+             Roboto,Helvetica,Arial,sans-serif;
+  --ui:      Roboto,"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+  /* frame — matches the 20/1920 margin of the brand mock */
+  --pad:  clamp(18px, 1.15vw, 26px);
+  --col:  16.6667%;                 /* 6-column field */
+  --colw: 16.6667vw;                /* same module, viewport-relative:
+                                       % would resolve against the parent */
+  --gut:  calc(var(--col) * 1);
+
+  /* motion */
+  --ease:    cubic-bezier(.22,1,.36,1);
+  --ease-io: cubic-bezier(.65,0,.35,1);
+  --ease-out:cubic-bezier(.33,1,.68,1);   /* hover: quick off the mark, soft landing */
+  --t-hover: .16s;
+}
+
+/* ---------- reset ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--paper);
+  font-family:var(--ui);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow:hidden;
+}
+img,svg,video{display:block;max-width:100%}
+ul,ol{margin:0;padding:0;list-style:none}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:1px solid var(--accent);outline-offset:4px}
+
+/* =============================================================
+   REVEAL SYSTEM
+   Everything is staged, then released when <body> gets .is-live
+   ============================================================= */
+.js .reveal{opacity:0}
+.js body.is-live .reveal{
+  animation:rise .95s var(--ease) both;
+  animation-delay:var(--delay,0s);
+}
+@keyframes rise{
+  from{opacity:0;transform:translate3d(0,14px,0)}
+  to  {opacity:1;transform:none}
+}
+
+/* grid rules draw downward */
+.js .grid__rule{transform:scaleY(0);transform-origin:top center}
+.js body.is-live .grid__rule{
+  animation:draw 1.15s var(--ease) both;
+  animation-delay:var(--delay,0s);
+}
+@keyframes draw{from{transform:scaleY(0);opacity:.6}to{transform:scaleY(1);opacity:1}}
+
+/* horizontal rules draw outward */
+.js .rule{transform:scaleX(0);transform-origin:left center}
+.js body.is-live .rule{
+  animation:drawX 1.1s var(--ease) both;
+  animation-delay:var(--delay,0s);
+}
+@keyframes drawX{from{transform:scaleX(0);opacity:1}to{transform:scaleX(1);opacity:1}}
+
+/* the photograph */
+.js .stage__img{opacity:0;transform:scale(1.075)}
+.js body.is-live .stage__img{
+  animation:plate 2.2s var(--ease) both;
+  animation-delay:var(--delay,0s);
+}
+@keyframes plate{
+  from{opacity:0;transform:scale(1.075)}
+  to  {opacity:1;transform:scale(1)}
+}
+
+/* =============================================================
+   LOADER
+   ============================================================= */
+.loader{
+  position:fixed;inset:0;z-index:100;
+  display:grid;place-items:center;
+  background:var(--ink-vid);
+  isolation:isolate;                /* contain the blend below */
+  transition:opacity .7s var(--ease), visibility .7s;
+}
+.loader.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.loader__video{
+  width:min(50%,940px);height:auto;
+  max-height:56%;
+  object-fit:contain;
+  background:transparent;
+  /* the video's ground is never lighter than the plate, so it vanishes;
+     every glyph pixel is lighter, so the mark passes through untouched */
+  mix-blend-mode:lighten;
+}
+.loader__fallback{
+  position:absolute;
+  width:min(34vw,240px);height:auto;
+  opacity:0;
+  transition:opacity .6s var(--ease);
+}
+.loader.is-fallback .loader__video{display:none}
+.loader.is-fallback .loader__fallback{opacity:1;animation:pulse 2s var(--ease-io) infinite}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.loader__bar{
+  position:absolute;left:var(--pad);right:var(--pad);bottom:var(--pad);
+  height:1px;background:var(--line);overflow:hidden;
+}
+.loader__bar i{
+  display:block;height:100%;width:0;
+  background:var(--accent);
+  transition:width .35s linear;
+}
+.loader__skip{
+  position:absolute;right:var(--pad);bottom:calc(var(--pad) + 18px);
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);
+  opacity:0;transition:opacity .5s var(--ease),color .25s;
+}
+.loader__skip.is-shown{opacity:1}
+.loader__skip:hover{color:var(--accent)}
+
+/* =============================================================
+   HERO SHELL
+   ============================================================= */
+.hero{
+  position:relative;
+  width:100%;height:100svh;min-height:520px;
+  overflow:hidden;
+  isolation:isolate;
+}
+
+/* ---------- stage ---------- */
+.stage{position:absolute;inset:0;z-index:0;background:var(--ink)}
+.stage__img{
+  position:absolute;inset:-2%;
+  background:url("../assets/hero-bg.jpg") 52% 46%/cover no-repeat;
+  filter:brightness(.19) contrast(1.14) saturate(.55);
+  will-change:transform;
+}
+/* diagonal light lift, echoing the table edge in the photograph */
+.stage__sheen{
+  position:absolute;inset:0;
+  background:linear-gradient(112deg,
+    rgba(255,117,70,.07) 0%,
+    rgba(255,117,70,0)   34%,
+    rgba(251,248,243,.02) 60%,
+    rgba(0,0,0,0)        100%);
+  mix-blend-mode:screen;
+}
+.stage__vignette{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(130% 100% at 18% 82%, rgba(9,9,10,.82) 0%, rgba(9,9,10,0) 62%),
+    radial-gradient(90%  70% at 92%  8%, rgba(9,9,10,.55) 0%, rgba(9,9,10,0) 70%),
+    linear-gradient(to bottom, rgba(20,20,21,.80) 0%, rgba(20,20,21,.30) 30%, rgba(20,20,21,.92) 100%);
+}
+.stage__grain{
+  position:absolute;inset:-150px;
+  opacity:.14;pointer-events:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  animation:grain 6s steps(6) infinite;
+}
+@keyframes grain{
+  0%  {transform:translate(0,0)}
+  20% {transform:translate(-14px,7px)}
+  40% {transform:translate(9px,-12px)}
+  60% {transform:translate(-7px,-6px)}
+  80% {transform:translate(12px,10px)}
+  100%{transform:translate(0,0)}
+}
+
+/* ---------- structural grid ---------- */
+.grid{position:absolute;inset:0;z-index:1;pointer-events:none}
+.grid__rule{
+  position:absolute;top:0;bottom:0;width:1px;
+  background:var(--line);
+}
+.grid__rule:nth-child(1){left:calc(var(--col) * 1)}
+.grid__rule:nth-child(2){left:calc(var(--col) * 2)}
+.grid__rule:nth-child(3){left:calc(var(--col) * 3)}
+.grid__rule:nth-child(4){left:calc(var(--col) * 4)}
+.grid__rule:nth-child(5){left:calc(var(--col) * 5)}
+
+/* registration ticks on the head rule */
+.ticks{position:absolute;inset:0;z-index:3;pointer-events:none}
+.tick{
+  position:absolute;
+  top:calc(var(--pad) + 58px);
+  width:7px;height:7px;
+  margin:-3.5px 0 0 -3.5px;
+}
+.tick::before,.tick::after{
+  content:"";position:absolute;background:var(--line-2);
+}
+.tick::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-50%)}
+.tick::after {top:50%;left:0;right:0;height:1px;transform:translateY(-50%)}
+.tick:nth-child(1){left:calc(var(--col) * 1)}
+.tick:nth-child(2){left:calc(var(--col) * 2)}
+.tick:nth-child(3){left:calc(var(--col) * 3)}
+.tick:nth-child(4){left:calc(var(--col) * 4)}
+.tick:nth-child(5){left:calc(var(--col) * 5);display:none} /* sits under the CTA */
+
+/* horizontal hairlines */
+.rule{
+  position:absolute;left:var(--pad);right:var(--pad);
+  height:1px;background:var(--line);z-index:2;
+}
+.rule--head{top:calc(var(--pad) + 58px);right:calc(var(--col) + 20px)}
+.rule--foot{bottom:calc(var(--pad) + 34px)}
+
+/* =============================================================
+   MASTHEAD
+   ============================================================= */
+.masthead{
+  position:absolute;z-index:4;
+  top:var(--pad);left:0;right:0;
+}
+.logo{
+  position:fixed;z-index:70;
+  top:var(--pad);left:var(--pad);
+  display:grid;place-items:start;
+}
+.logo img{
+  grid-area:1/1;
+  width:auto;
+  transition:opacity .38s var(--ease);
+}
+.logo__wordmark{height:34px}
+.logo__mark{height:38px;opacity:0}
+.logo:hover{opacity:.78;transition:opacity .3s}
+
+.note{
+  position:absolute;top:2px;
+  font-size:clamp(10.5px,.68vw,12.5px);
+  line-height:1.45;
+  font-weight:400;
+  letter-spacing:.005em;
+  color:rgba(251,248,243,.86);
+  max-width:calc(16.6667% - 26px);
+}
+.note em{font-style:normal;color:var(--accent)}
+.note--a{left:50%}
+.note--b{left:66.6667%}
+
+/* =============================================================
+   LEFT RAIL
+   ============================================================= */
+.menu{
+  position:fixed;z-index:70;
+  left:calc(var(--pad) - 10px);top:calc(50% - 24px);
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px 14px 10px;      /* 48px tall hit target */
+  color:var(--paper);
+}
+.menu__bars{
+  position:relative;
+  display:flex;gap:5px;align-items:center;
+  width:16px;height:19px;
+}
+.menu__bars i{
+  position:absolute;top:0;
+  width:2px;height:19px;background:currentColor;
+  transition:transform .45s var(--ease),opacity .25s var(--ease),background .3s;
+}
+.menu__bars i:nth-child(1){left:0}
+.menu__bars i:nth-child(2){left:7px}
+.menu__bars i:nth-child(3){left:14px}
+
+.menu:hover .menu__bars i{background:var(--accent)}
+.menu:not(.is-active):hover .menu__bars i:nth-child(1){transform:scaleY(.62)}
+.menu:not(.is-active):hover .menu__bars i:nth-child(3){transform:scaleY(.62)}
+
+/* the three bars collapse into a cross, in place */
+.menu.is-active .menu__bars i:nth-child(1){transform:translateX(7px) rotate(45deg)}
+.menu.is-active .menu__bars i:nth-child(2){opacity:0;transform:scaleY(.2)}
+.menu.is-active .menu__bars i:nth-child(3){transform:translateX(-7px) rotate(-45deg)}
+.menu.is-active .menu__bars i{background:var(--paper)}
+.menu.is-active:hover .menu__bars i{background:var(--accent)}
+
+.menu__label{
+  display:grid;                     /* both words share one cell — no width jump */
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(251,248,243,.85);
+}
+.menu__word{
+  grid-area:1/1;
+  transition:opacity .3s var(--ease),transform .3s var(--ease);
+}
+.menu__word--close{opacity:0;transform:translateY(4px);color:var(--accent)}
+.menu.is-active .menu__word--open{opacity:0;transform:translateY(-4px)}
+.menu.is-active .menu__word--close{opacity:1;transform:none}
+
+.social{
+  position:fixed;z-index:70;
+  left:var(--pad);bottom:calc(var(--pad) + 78px);
+  display:flex;flex-direction:column;gap:26px;
+}
+.social a{
+  display:block;color:rgba(251,248,243,.72);
+  transition:color var(--t-hover) var(--ease-out),
+             transform .22s var(--ease-out);
+}
+.social a:hover{color:var(--accent);transform:translateX(3px)}
+
+/* =============================================================
+   STATEMENT
+   ============================================================= */
+.statement{
+  position:absolute;z-index:4;
+  left:calc(var(--col) * 1);
+  right:calc(var(--col) + 20px);
+  bottom:clamp(96px,15vh,168px);
+}
+
+.eyebrow{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:clamp(16px,1.8vh,26px);
+  font-size:11px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(251,248,243,.62);
+}
+.eyebrow__idx{color:var(--accent);font-variant-numeric:tabular-nums}
+.eyebrow::after{
+  content:"";flex:0 0 46px;height:1px;background:var(--line-2);
+}
+
+.headline{
+  margin:0;
+  font-family:var(--display);
+  font-weight:500;
+  font-size:clamp(30px,4.9vw,96px);
+  line-height:1.015;
+  letter-spacing:-.032em;
+  color:var(--paper);
+}
+.headline em{font-style:normal;color:var(--accent)}
+
+/* each line is its own mask; the descender room is added back as padding
+   and removed again as margin so the line rhythm is untouched */
+.headline__line{
+  display:block;overflow:hidden;
+  padding-bottom:.16em;margin-bottom:-.16em;
+}
+.headline__line > span{display:block}
+
+.js .headline__line > span{transform:translateY(120%)}
+.js body.is-live .headline__line > span{
+  animation:riseLine 1.05s var(--ease) both;
+}
+.js body.is-live .headline__line:nth-child(1) > span{animation-delay:1.15s}
+.js body.is-live .headline__line:nth-child(2) > span{animation-delay:1.25s}
+.js body.is-live .headline__line:nth-child(3) > span{animation-delay:1.35s}
+@keyframes riseLine{
+  from{transform:translateY(120%)}
+  to  {transform:translateY(0)}
+}
+
+/* ---------- disciplines ---------- */
+/* The block shrink-wraps the discipline line, so the rule above it — five
+   even segments for five disciplines — measures exactly the same width. */
+.services{
+  width:max-content;max-width:100%;
+  margin-top:clamp(22px,3.4vh,44px);
+}
+.services__rule{
+  display:flex;gap:5px;
+  margin-bottom:clamp(10px,1.1vh,14px);
+}
+.services__rule i{
+  flex:1 1 0;height:1px;background:var(--line-2);
+  animation:seg 8s var(--ease-io) infinite;
+}
+.services__rule i:nth-child(1){animation-delay:0s}
+.services__rule i:nth-child(2){animation-delay:1.6s}
+.services__rule i:nth-child(3){animation-delay:3.2s}
+.services__rule i:nth-child(4){animation-delay:4.8s}
+.services__rule i:nth-child(5){animation-delay:6.4s}
+@keyframes seg{
+  0%,11%  {background:var(--accent)}
+  19%,100%{background:var(--line-2)}
+}
+
+.services__list{
+  display:flex;flex-wrap:wrap;
+  font-size:clamp(10.5px,.72vw,12.5px);
+  font-weight:400;letter-spacing:.13em;text-transform:uppercase;
+  color:rgba(251,248,243,.68);
+}
+.services__list li{white-space:nowrap}
+.services__list li:not(:last-child)::after{
+  content:"/";margin:0 clamp(8px,.8vw,12px);color:rgba(251,248,243,.28);
+}
+
+/* =============================================================
+   STATUS BAR
+   ============================================================= */
+.status{
+  position:absolute;z-index:4;
+  left:0;right:0;bottom:var(--pad);
+  padding:0 var(--pad);
+  display:flex;align-items:center;
+  font-size:10.5px;font-weight:400;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(251,248,243,.56);
+}
+.status__item{display:flex;align-items:center;gap:9px}
+.status__item--mid{position:absolute;left:50%}
+.status__item--end{margin-left:auto}
+.status sup{font-size:.7em;letter-spacing:0}
+.status time{font-variant-numeric:tabular-nums;letter-spacing:.1em}
+.dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 0 rgba(255,117,70,.55);
+  animation:beat 2.6s var(--ease-io) infinite;
+}
+@keyframes beat{
+  0%  {box-shadow:0 0 0 0 rgba(255,117,70,.5)}
+  70% {box-shadow:0 0 0 7px rgba(255,117,70,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,117,70,0)}
+}
+
+/* =============================================================
+   CALL TO ACTION
+   Fills the top-right cell of the grid outright: page edge to page
+   edge on two sides, the last column rule on the third, the head
+   rule on the fourth.
+   ============================================================= */
+.cta{
+  position:absolute;z-index:6;
+  top:0;right:0;
+  width:var(--col);
+  height:calc(var(--pad) + 58px);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;
+  padding:0 clamp(15px,1.15vw,22px);
+  background:var(--accent);
+  color:var(--ink);
+}
+.cta__title{
+  font-family:var(--display);font-weight:500;
+  font-size:clamp(15px,1.12vw,19px);
+  letter-spacing:-.015em;
+  white-space:nowrap;
+}
+.cta__arrow{
+  flex:0 0 auto;
+  transition:transform .3s var(--ease-out);
+}
+.cta:hover .cta__arrow,
+.cta:focus-visible .cta__arrow{transform:translate(4px,-4px)}
+.cta:focus-visible{outline:2px solid var(--paper);outline-offset:-6px}
+
+/* extends out of the corner it is anchored to */
+.js .cta{transform:scaleX(0);transform-origin:right center;opacity:0}
+.js body.is-live .cta{
+  animation:block .85s var(--ease) both;
+  animation-delay:.95s;
+}
+@keyframes block{
+  from{transform:scaleX(0);opacity:1}
+  to  {transform:scaleX(1);opacity:1}
+}
+
+/* =============================================================
+   THE FIELD
+   The six columns, drawn wherever a page wants them. The rule
+   colour follows the ground it is drawn on.
+   ============================================================= */
+.cols{position:absolute;inset:0;pointer-events:none;z-index:0}
+.cols i{
+  position:absolute;top:0;bottom:0;width:1px;
+  background:var(--rule, rgba(20,20,21,.12));
+}
+.cols i:nth-child(1){left:calc(var(--col) * 1)}
+.cols i:nth-child(2){left:calc(var(--col) * 2)}
+.cols i:nth-child(3){left:calc(var(--col) * 3)}
+.cols i:nth-child(4){left:calc(var(--col) * 4)}
+.cols i:nth-child(5){left:calc(var(--col) * 5)}
+
+/* =============================================================
+   THE CURTAIN
+   The menu's own panels, held across a page change. Leaving, the
+   menu is already covering the screen, so the panels simply stay
+   while the browser navigates; arriving, the same panels retract to
+   the edges each came from — one continuous move across two loads.
+   ============================================================= */
+.curtain{
+  position:fixed;inset:0;z-index:95;
+  display:flex;
+  visibility:hidden;
+  pointer-events:none;
+}
+html.is-arriving .curtain,
+html.is-leaving  .curtain{visibility:visible}
+/* while it closes, the page underneath must not take another click */
+html.is-leaving .curtain{pointer-events:auto}
+.curtain i{
+  flex:1 1 0;
+  background:var(--white);
+  transform:scaleY(1);
+  transition:transform .62s var(--ease-io);
+  transition-delay:calc(var(--i) * 45ms);
+}
+.curtain i:nth-child(odd) {transform-origin:top center}
+.curtain i:nth-child(even){transform-origin:bottom center}
+
+/* arriving — covered on the first frame, then retracting, left to right */
+.curtain.is-out i{transform:scaleY(0)}
+
+/* leaving by any link other than the menu's: the panels are not up yet, so
+   they close over the page first — same directions, a shade quicker, because
+   here the visitor is waiting on them rather than watching them go. */
+/* Held still while the opening state is committed. Without this the panels
+   ease towards open the instant `is-leaving` lands, and the sweep that follows
+   retargets a transition already in flight — it travels almost nothing, and
+   the page change reads as a cut. See sweep() in js/main.js. */
+.curtain.is-set i{transition:none!important}
+
+html.is-leaving .curtain i{
+  transform:scaleY(0);
+  transition:transform .46s var(--ease-io);
+  transition-delay:calc(var(--i) * 28ms);
+}
+html.is-leaving .curtain.is-in i{transform:scaleY(1)}
+
+/* ---------- over the menu ----------
+   Leaving through the menu is the one case where the panels are already up,
+   so there is nothing left to reveal. The columns come down over the menu in
+   ink instead — the only colour that reads against it — and the next page
+   picks them up in the same ink and takes them away, off a photograph. */
+html.is-ink .curtain i{background:var(--ink)}
+
+
+/* on the way out the menu's words clear first, leaving only the panels */
+.nav.is-leaving .nav__list,
+.nav.is-leaving .nav__foot,
+.nav.is-leaving .nav__grid{
+  opacity:0;
+  transition:opacity .22s var(--ease-out);
+}
+body.is-leaving .logo,
+body.is-leaving .menu,
+body.is-leaving .social{
+  opacity:0;
+  transition:opacity .22s var(--ease-out);
+}
+
+/* =============================================================
+   MENU PAGE
+   The brand colour takes the whole screen. It arrives as six column
+   panels that sweep in alternating directions — a shutter closing —
+   and leaves the same way, in reverse.
+   ============================================================= */
+.nav{
+  position:fixed;inset:0;z-index:60;
+  visibility:hidden;
+  transition:visibility 0s linear .95s;
+}
+.nav.is-open{visibility:visible;transition-delay:0s}
+
+/* ---------- the transition ---------- */
+.nav__panels{position:absolute;inset:0;display:flex}
+.nav__panels i{
+  flex:1 1 0;
+  background:var(--white);
+  transform:scaleY(0);
+  transition:transform .62s var(--ease-io);
+  transition-delay:calc((5 - var(--i)) * 45ms);   /* closing: right to left */
+}
+.nav__panels i:nth-child(odd) {transform-origin:top center}
+.nav__panels i:nth-child(even){transform-origin:bottom center}
+.nav.is-open .nav__panels i{
+  transform:scaleY(1);
+  transition-delay:calc(var(--i) * 45ms);          /* opening: left to right */
+}
+
+/* ---------- the page it reveals ---------- */
+.nav__grid{position:absolute;inset:0;pointer-events:none;opacity:0;
+  transition:opacity .4s var(--ease) .1s}
+.nav.is-open .nav__grid{opacity:1;transition-delay:.5s}
+.nav__grid span{
+  position:absolute;top:0;bottom:0;width:1px;
+  background:rgba(20,20,21,.13);
+}
+.nav__grid span:nth-child(1){left:calc(var(--col) * 1)}
+.nav__grid span:nth-child(2){left:calc(var(--col) * 2)}
+.nav__grid span:nth-child(3){left:calc(var(--col) * 3)}
+.nav__grid span:nth-child(4){left:calc(var(--col) * 4)}
+.nav__grid span:nth-child(5){left:calc(var(--col) * 5)}
+
+.nav__list{
+  position:absolute;
+  left:calc(var(--col) * 1);
+  right:var(--pad);
+  top:calc(var(--pad) + 58px);
+  bottom:calc(var(--pad) + 44px);
+  display:flex;flex-direction:column;justify-content:center;
+}
+.nav__list li{
+  /* descender room, given back as negative margin so the stack stays tight */
+  overflow:hidden;
+  /* line-height .8 pulls the line box inside the glyphs, so descenders sit
+     .18em below it — the padding buys that back, the margin removes it again */
+  padding-bottom:.26em;margin-bottom:-.26em;
+  /* five items, not six — the height each one may take goes up with it */
+  font-size:clamp(28px,min(9.6vw,16.2vh),190px);
+}
+.nav__list a{
+  display:flex;align-items:flex-start;gap:clamp(10px,1.1vw,18px);
+  /* 600 is the true Medium of this family — 500 resolves to Roman */
+  font-family:var(--display);font-weight:600;
+  line-height:.92;letter-spacing:-.032em;
+  color:var(--ink);
+  transform:translateY(145%);   /* must exceed mask height ÷ line height */
+  transition:transform .78s var(--ease),color var(--t-hover) var(--ease-out);
+}
+.nav.is-open .nav__list a{transform:none}
+.nav.is-open .nav__list li:nth-child(1) a{transition-delay:.42s,0s}
+.nav.is-open .nav__list li:nth-child(2) a{transition-delay:.48s,0s}
+.nav.is-open .nav__list li:nth-child(3) a{transition-delay:.54s,0s}
+.nav.is-open .nav__list li:nth-child(4) a{transition-delay:.60s,0s}
+.nav.is-open .nav__list li:nth-child(5) a{transition-delay:.66s,0s}
+.nav.is-open .nav__list li:nth-child(6) a{transition-delay:.72s,0s}
+.nav__list a:hover,
+.nav__list a:focus-visible{color:var(--accent)}
+
+.nav__foot{
+  position:absolute;left:var(--pad);bottom:var(--pad);
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(20,20,21,.55);
+  opacity:0;transition:opacity .4s var(--ease),color var(--t-hover) var(--ease-out);
+}
+.nav.is-open .nav__foot{opacity:1;transition-delay:.62s}
+.nav__foot a{color:inherit;transition:color var(--t-hover) var(--ease-out)}
+.nav__foot a:hover{color:var(--accent)}
+
+/* ---------- chrome inverts over the brand colour ---------- */
+body.nav-open .logo__wordmark{opacity:0}
+body.nav-open .logo__mark{opacity:1}
+body.nav-open .menu.is-active .menu__bars i{background:var(--ink)}
+body.nav-open .menu__word--close{color:var(--ink)}
+body.nav-open .menu:hover .menu__bars i{background:var(--accent)}
+body.nav-open .menu:hover .menu__word--close{color:var(--accent)}
+body.nav-open .social a{color:rgba(20,20,21,.78)}
+body.nav-open .social a:hover{color:var(--accent)}
+
+/* =============================================================
+   RESPONSIVE
+   ============================================================= */
+
+/* ── laptop ── */
+@media (max-width:1180px){
+  .note{max-width:calc(25% - 26px)}
+  .note--a{left:50%}
+  .note--b{display:none}
+  .statement{bottom:clamp(88px,13vh,140px)}
+}
+
+/* ── tablet ── */
+@media (max-width:900px){
+  :root{
+    --col:25%;                           /* 4-column field */
+    --colw:25vw;
+  }
+  .grid__rule:nth-child(4),
+  .grid__rule:nth-child(5),
+  .tick:nth-child(3),
+  .tick:nth-child(4),
+  .tick:nth-child(5),
+  .nav__grid span:nth-child(4),
+  .nav__grid span:nth-child(5),
+  .nav__panels i:nth-child(5),
+  .nav__panels i:nth-child(6){display:none}
+
+  .note--a{left:50%;max-width:calc(50% - 26px)}
+
+  .menu{top:auto;bottom:calc(var(--pad) + 78px)}
+  .social{
+    left:auto;right:var(--pad);
+    bottom:calc(var(--pad) + 78px);
+    flex-direction:row;gap:20px;
+  }
+  .statement{
+    left:var(--pad);right:var(--pad);padding-left:0;
+    bottom:calc(var(--pad) + 122px);
+  }
+  .nav__list{left:var(--pad)}
+  .headline{font-size:clamp(32px,6.4vw,58px)}
+  .services__list{font-size:11px}
+  .status__item--mid{display:none}
+
+  /* the mark needs more of a narrow screen to stay legible */
+  .loader__video{width:72%;max-height:50%}
+}
+
+/* ── phone ── */
+@media (max-width:600px){
+  :root{
+    --col:33.3333%;                      /* 3-column field */
+    --colw:33.3333vw;
+    --pad:16px;
+  }
+  .grid__rule:nth-child(3),
+  .tick:nth-child(3),
+  .nav__grid span:nth-child(3),
+  .nav__panels i:nth-child(4){display:none}
+  .nav__list li{font-size:clamp(28px,8.8vw,42px)}
+
+  .rule--head{top:calc(var(--pad) + 46px);right:calc(var(--col) * 2 + 20px)}
+  .tick{display:none}                    /* all of them fall under the CTA */
+  .cta{
+    width:calc(var(--col) * 2);
+    height:calc(var(--pad) + 46px);
+  }
+  .logo img{height:27px}
+  .note{
+    position:static;margin:26px 0 0 var(--pad);
+    max-width:30ch;padding-left:0;
+    font-size:11.5px;
+  }
+  .headline{font-size:clamp(29px,7.6vw,44px);letter-spacing:-.025em}
+  .statement{bottom:calc(var(--pad) + 128px)}
+  .nav__list{left:var(--pad);bottom:calc(var(--pad) + 38px)}
+  .services__list{font-size:10px;letter-spacing:.1em}
+  .services__list li:not(:last-child)::after{margin:0 8px}
+  .menu{bottom:calc(var(--pad) + 66px)}
+  .social{bottom:calc(var(--pad) + 66px);gap:18px}
+  .rule--foot{bottom:calc(var(--pad) + 28px)}
+  .status{font-size:9.5px;letter-spacing:.1em}
+  /* full width of the column on a phone — the easiest possible tap target */
+  .loader__video{width:88%;max-height:44%}
+}
+
+/* six nav items need headroom on a short screen */
+@media (max-height:760px){
+}
+
+/* short viewports (landscape phones) */
+@media (max-height:560px){
+  .statement{bottom:calc(var(--pad) + 96px)}
+  .headline{font-size:clamp(26px,4.4vw,40px)}
+  .services{margin-top:16px}
+  .eyebrow{margin-bottom:12px}
+}
+
+/* =============================================================
+   MOTION PREFERENCES
+   ============================================================= */
+@media (prefers-reduced-motion:reduce){
+  .curtain i{transition:none}
+  .js .reveal,
+  .js body.is-live .reveal,
+  .js .grid__rule,
+  .js body.is-live .grid__rule,
+  .js .rule,
+  .js body.is-live .rule,
+  .js .stage__img,
+  .js body.is-live .stage__img,
+  .js .headline__line > span,
+  .js body.is-live .headline__line > span{
+    animation:none!important;
+    opacity:1;transform:none;clip-path:none;
+  }
+  .stage__grain,.dot,.services__rule i{animation:none}
+  .loader{display:none}
+  *,*::before,*::after{transition-duration:.01ms!important}
+}
+
+/* no-JS: show everything */
+html.no-js .loader{display:none}

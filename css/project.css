@@ -1,0 +1,433 @@
+/* =============================================================
+   FLATGRID STUDIO — project
+   A cover that holds the screen, then the paper: the brief and its
+   specification, a stack of plates all cut to one size, and text
+   set between them wherever the work needs explaining.
+   ============================================================= */
+
+.page-project{
+  background:var(--white);
+  color:var(--ink);
+  height:auto;
+  overflow:visible;                 /* the reset closes the body; open it */
+
+  /* one plate proportion for the whole site — 2000 x 1250 */
+  --plate: 8 / 5;
+  --stack: clamp(14px, 1.7vw, 28px);   /* air between plates; 0 to butt them */
+
+  /* The first grid rule. Everything on the page starts here: the cover, the
+     plates, the description, the outro. It also leaves the whole first column
+     free for the rail control, so no photograph ever runs under it. */
+  --edge: calc(var(--col) * 1);
+
+  /* how far the cover photograph travels as you scroll past it. The image is
+     built taller by exactly this much so the drift has somewhere to go — it
+     used to be a 1.06 scale, but that bled sideways over the column the rail
+     control needs. js/project.js reads this value, so tune it here only. */
+  --drift: 60px;
+  --bay:   clamp(64px, 10vh, 132px);   /* air around a text section */
+}
+.page-project.is-navlocked{overflow:hidden}
+
+/* =============================================================
+   REVEALS
+   ============================================================= */
+.js .up{opacity:0;transform:translate3d(0,26px,0)}
+.js .up.is-seen{
+  opacity:1;transform:none;
+  transition:opacity .85s var(--ease),transform .85s var(--ease);
+}
+.js .up.is-seen.d1{transition-delay:.09s}
+.js .up.is-seen.d2{transition-delay:.18s}
+
+/* =============================================================
+   CHROME
+   The rail and the wordmark are carried from the other pages. They
+   sit over ink at the cover and over paper below it, so each one
+   turns dark when the paper reaches it — see js/project.js.
+   ============================================================= */
+.page-project .logo{position:fixed;z-index:70;top:var(--pad);left:var(--pad)}
+.page-project .menu{position:fixed;z-index:70;left:calc(var(--pad) - 10px);top:calc(50% - 24px)}
+
+.logo.on-paper .logo__wordmark{opacity:0}
+.logo.on-paper .logo__mark{opacity:1}
+.menu.on-paper .menu__bars i{background:var(--ink)}
+.menu.on-paper .menu__label{color:rgba(20,20,21,.62)}
+.menu.on-paper:hover .menu__bars i{background:var(--accent)}
+
+/* ---------- the way back ---------- */
+.back{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(13px,1.05vw,16px);
+  letter-spacing:-.012em;
+  color:var(--accent);
+}
+.back svg{
+  flex:none;
+  transition:transform .3s var(--ease-out);
+}
+.back:hover svg{transform:translateX(-5px)}
+
+/* Under the last rule of the specification, set clear of it, in ink and
+   underlined. Blockified by the grid, which is what lets the underline sit
+   on the words rather than on a flex container. */
+.back--under{
+  display:inline;
+  margin-top:clamp(26px,3.8vh,48px);
+  color:var(--ink);
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:.3em;
+  transition:color var(--t-hover) var(--ease-out);
+}
+.back--under:hover{color:var(--accent)}
+
+/* block level, or it sets itself on the same line as the project name
+   above it — both are inline-flex */
+.back--foot{display:flex;width:max-content;margin-top:clamp(40px,6vh,72px)}
+
+/* =============================================================
+   COVER
+   Nine tenths of the screen, so the page beneath it is announced
+   rather than hidden.
+   ============================================================= */
+.cover{
+  position:relative;
+  height:90svh;min-height:420px;
+  overflow:hidden;
+  background:var(--ink-2);
+  isolation:isolate;
+}
+.cover__img{
+  position:absolute;
+  left:var(--edge);
+  top:calc(var(--drift) * -1);
+  /* stated rather than left to the insets: a replaced element with width:auto
+     takes its intrinsic width and ignores `right`, so it would overrun */
+  width:calc(100% - var(--edge) - var(--pad));
+  height:calc(100% + var(--drift));
+  object-fit:cover;
+  filter:brightness(.92) saturate(.95);
+  translate:0 var(--shift,0px);      /* scroll only — never transitioned */
+  will-change:translate;
+}
+/* The name has moved onto the paper, so the photograph no longer has to
+   carry type: what is left is a light foot, just enough to hold the scroll
+   cue, and the picture keeps its own light everywhere else. */
+.cover__scrim{
+  position:absolute;z-index:1;
+  inset:0 var(--pad) 0 var(--edge);
+  background:linear-gradient(to top,
+    rgba(10,10,11,.46) 0%,
+    rgba(10,10,11,.14) 12%,
+    rgba(10,10,11,0)   26%);
+}
+.cover__grain{
+  position:absolute;inset:-140px;z-index:2;
+  pointer-events:none;opacity:.22;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='.62'/%3E%3C/svg%3E");
+  animation:filmgrain .9s steps(8) infinite;
+}
+/* the grain also lives on the work page; both pages carry their own copy
+   so neither stylesheet depends on the other being loaded */
+@keyframes filmgrain{
+  0%  {transform:translate3d(0,0,0)}
+  12% {transform:translate3d(-14px,9px,0)}
+  25% {transform:translate3d(11px,-13px,0)}
+  37% {transform:translate3d(-9px,-7px,0)}
+  50% {transform:translate3d(13px,11px,0)}
+  62% {transform:translate3d(-12px,5px,0)}
+  75% {transform:translate3d(7px,-10px,0)}
+  87% {transform:translate3d(-6px,12px,0)}
+  100%{transform:translate3d(0,0,0)}
+}
+
+.cover__cue{
+  position:absolute;z-index:3;
+  right:var(--pad);bottom:clamp(34px,6.5vh,84px);
+  display:flex;align-items:center;gap:11px;
+  font-family:var(--ui);
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(251,248,243,.5);
+}
+.cover__cue i{
+  width:34px;height:1px;background:rgba(251,248,243,.34);
+  transform-origin:left center;
+  animation:cue 2.4s var(--ease-io) infinite;
+}
+@keyframes cue{
+  0%,100%{transform:scaleX(.35)}
+  50%    {transform:scaleX(1)}
+}
+
+/* =============================================================
+   PAPER
+   Full bleed, so the six columns land on the same percentages the
+   rest of the site uses. Sections carry their own frame.
+   ============================================================= */
+.paper{position:relative;background:var(--white)}
+
+/* .cols now lives in style.css — every page draws the field */
+
+/* =============================================================
+   BRIEF  —  what it is, and the facts of it
+   ============================================================= */
+/* Two rows. The name, its line and the description are one stack on the
+   left, set from the bottom against the specification on the right, so the
+   last line of the description lands on the last rule of the specification
+   and the name sits directly above the words it introduces. The way back
+   hangs below that rule, in a row of its own. */
+.brief{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:repeat(6,1fr);
+  padding:clamp(58px,9vh,124px) 0 clamp(56px,9vh,120px);
+}
+
+.brief__name{
+  margin:0;
+  font-family:var(--display);font-weight:600;
+  /* held back from the cover setting so the longest name still sets on one
+     line inside three columns — the mask depends on it */
+  font-size:clamp(32px,4.5vw,76px);
+  line-height:.96;letter-spacing:-.036em;
+  color:var(--ink);
+  /* the line rises out of its own mask, so the reveal does the work here
+     rather than the fade every other block uses */
+  display:block;overflow:hidden;
+  padding-bottom:.08em;margin-bottom:-.08em;
+}
+.js .brief__name.up{opacity:1;transform:none}
+.brief__name span{display:block}
+.js .brief__name.up span{
+  transform:translateY(112%);
+  transition:transform .95s var(--ease);
+}
+.js .brief__name.up.is-seen span{transform:none}
+
+.brief__line{
+  margin-top:clamp(14px,1.9vh,26px);
+  font-family:var(--ui);
+  font-size:11px;font-weight:400;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(20,20,21,.5);
+}
+
+.brief__text{
+  grid-column:2 / span 3;grid-row:1;
+  align-self:end;
+  padding-right:clamp(26px,3.4vw,64px);
+}
+.brief__lead{
+  margin-top:clamp(30px,4.6vh,62px);
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(17px,1.52vw,27px);
+  line-height:1.36;letter-spacing:-.018em;
+  color:var(--ink);
+}
+
+.spec{
+  grid-column:5 / span 2;grid-row:1;
+  margin:0;
+  padding-right:var(--pad);
+  align-self:end;
+}
+.back--under{
+  grid-column:5 / span 2;grid-row:2;
+  justify-self:end;
+  margin-right:var(--pad);
+}
+.spec__row{
+  display:flex;align-items:baseline;justify-content:space-between;gap:6px 18px;
+  /* when the column is too narrow to hold the label and the value side by
+     side, the value drops whole onto the next line rather than breaking the
+     disciplines mid-phrase */
+  flex-wrap:wrap;
+  padding:clamp(10px,1.3vh,15px) 0;
+  border-top:1px solid rgba(20,20,21,.17);
+}
+.spec__row:last-child{border-bottom:1px solid rgba(20,20,21,.17)}
+.spec dt{
+  flex:none;
+  font-family:var(--ui);
+  font-size:10.5px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(20,20,21,.44);
+}
+.spec dd{
+  margin:0 0 0 auto;text-align:right;   /* auto keeps it right once it wraps */
+  max-width:100%;
+  font-family:var(--display);font-weight:400;
+  font-size:14px;line-height:1.5;letter-spacing:-.012em;
+  color:var(--ink);
+}
+/* the disciplines run on one line, cut by the same slash the home page uses */
+.spec__slash{margin:0 .34em;color:rgba(20,20,21,.3)}
+.spec__year{color:var(--accent);font-variant-numeric:tabular-nums}
+
+/* =============================================================
+   PLATES
+   One size, one proportion, one column of them. An <img>, a <video>
+   or a GIF all sit in the same frame — see README.
+   ============================================================= */
+.plate{
+  position:relative;z-index:1;
+  margin:0 var(--pad) var(--stack) var(--edge);
+  aspect-ratio:var(--plate);
+  overflow:hidden;
+  background:#F2EFEA;
+}
+.plate > img,
+.plate > video{
+  width:100%;height:100%;
+  object-fit:cover;
+  scale:1.03;
+  transition:scale 1.4s var(--ease-out);
+}
+.plate.is-seen > img,
+.plate.is-seen > video{scale:1}
+
+/* an empty slot, stating what it is waiting for */
+.plate--empty{
+  display:grid;place-items:center;
+  background:#F2EFEA;
+  outline:1px solid rgba(20,20,21,.09);
+  outline-offset:-1px;
+}
+.plate--empty::after{
+  content:attr(data-slot);
+  font-family:var(--ui);
+  font-size:10.5px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(20,20,21,.3);
+}
+
+/* =============================================================
+   CHAPTER
+   A text field set between plates: the label on the first column,
+   the writing on the last four.
+   ============================================================= */
+.chapter{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:repeat(6,1fr);
+  padding:var(--bay) 0;
+}
+.chapter__label{
+  grid-column:2 / span 1;
+  font-family:var(--ui);
+  font-size:10.5px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);
+}
+.chapter__body{
+  grid-column:3 / span 4;             /* one rule further in than the label */
+  padding-right:var(--pad);
+}
+.chapter__head{
+  margin:0;
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(24px,2.7vw,46px);
+  line-height:1.04;letter-spacing:-.03em;
+  color:var(--ink);
+  max-width:18ch;
+}
+.chapter__text{
+  margin-top:clamp(18px,2.6vh,32px);
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(13.5px,1.02vw,16px);
+  line-height:1.66;letter-spacing:-.002em;
+  color:rgba(20,20,21,.62);
+  max-width:58ch;
+}
+.chapter__text + .chapter__text{margin-top:1.2em}
+/* a chapter with no heading sets its paragraph at the heading's weight */
+.chapter--plain .chapter__text{
+  margin-top:0;
+  font-size:clamp(15px,1.24vw,20px);
+  line-height:1.52;
+  color:rgba(20,20,21,.78);
+  max-width:52ch;
+}
+
+/* =============================================================
+   OUTRO
+   Back onto ink, with the next project as the way on.
+   ============================================================= */
+.outro{
+  position:relative;
+  background:var(--ink);color:var(--paper);
+  padding:clamp(72px,13vh,170px) var(--pad) clamp(34px,5.5vh,64px)
+          var(--edge);
+}
+.outro__label{
+  font-family:var(--ui);
+  font-size:10.5px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);
+}
+.outro__next{
+  display:inline-flex;align-items:baseline;gap:.34em;
+  margin-top:clamp(12px,1.8vh,26px);
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(34px,5.6vw,96px);
+  line-height:1;letter-spacing:-.036em;
+  color:var(--paper);
+  transition:color var(--t-hover) var(--ease-out);
+}
+.outro__next svg{
+  flex:none;
+  width:.3em;height:.3em;
+  transition:transform .34s var(--ease-out);
+}
+.outro__next:hover{color:var(--accent)}
+.outro__next:hover svg{transform:translate(.16em,-.16em)}
+
+/* =============================================================
+   RESPONSIVE
+   ============================================================= */
+@media (max-width:900px){
+  .page-project{--bay:clamp(48px,7.5vh,88px)}
+
+  .cover{height:78svh}
+  .cover__scrim{inset:0}
+  .cover__img{left:0;width:100%}       /* the drift keeps its room */
+  .cover__label{left:var(--pad)}
+  .cover__cue{display:none}
+
+  /* no column to spare here, so the rail goes to the corner instead */
+  .page-project .menu{top:auto;bottom:calc(var(--pad) + 8px)}
+  .plate{margin-left:var(--pad)}
+
+  .cols{display:none}
+
+  .brief{display:block;padding:clamp(48px,8vh,88px) var(--pad) clamp(40px,6vh,72px)}
+  .brief__name{font-size:clamp(30px,7.6vw,54px)}
+  .brief__lead{margin-top:clamp(24px,4vh,38px)}
+  .brief__text{padding:0}
+  .spec{padding:0;margin-top:clamp(32px,5vh,54px)}
+  .back--under{margin-right:0;margin-top:clamp(22px,3.4vh,34px)}
+
+  .chapter{display:block;padding:var(--bay) var(--pad)}
+  .chapter__label{padding:0;margin-bottom:14px}
+  .chapter__body{padding:0}
+  .chapter__head{max-width:none}
+
+  .outro{padding-left:var(--pad)}
+}
+
+@media (max-width:600px){
+  .page-project .logo__wordmark{height:26px}
+  .brief__name{font-size:clamp(28px,8.4vw,44px)}
+}
+
+/* =============================================================
+   MOTION PREFERENCES
+   ============================================================= */
+@media (prefers-reduced-motion:reduce){
+  .js .up{opacity:1!important;transform:none!important}
+  .cover__img{translate:none!important}
+  .cover__grain{animation:none}
+  .cover__cue i{animation:none;transform:scaleX(1)}
+  .plate > img,.plate > video{scale:1!important;transition:none}
+  .js .brief__name.up span{transform:none;transition:none}
+}

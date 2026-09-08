@@ -1,0 +1,352 @@
+/* =============================================================
+   FLATGRID STUDIO — work
+   Words on the left third against ink; the photograph pinned across
+   the right two thirds. The photograph holds its place while a
+   project's words pass, then resolves into the next one.
+   ============================================================= */
+
+.page-work{
+  overflow-x:hidden;
+  background:var(--ink);
+  /* the words start clear of the rail control, which keeps the left edge */
+  /* breathing room between the end of a line and the frame */
+  --words-gap:clamp(30px, 3vw, 58px);
+}
+.page-work.is-navlocked{overflow:hidden}
+
+/* =============================================================
+   THE FIELD
+   The home page's six columns, carried across and drawn over the
+   photograph so the frame reads as part of the grid, not on top of it.
+   ============================================================= */
+.grid--fixed{position:fixed;inset:0;z-index:8;pointer-events:none}
+.page-work .grid__rule{background:rgba(251,248,243,.17)}
+/* the frame starts on the second rule, so rules 3–5 would lie across the
+   photograph — the field stops where the picture starts */
+.page-work .grid__rule:nth-child(3),
+.page-work .grid__rule:nth-child(4),
+.page-work .grid__rule:nth-child(5){display:none}
+
+/* =============================================================
+   CHROME
+   ============================================================= */
+.page-work .logo{
+  position:fixed;z-index:70;
+  top:var(--pad);left:var(--pad);
+}
+.page-work .menu{
+  position:fixed;z-index:70;
+  left:calc(var(--pad) - 10px);top:calc(50% - 24px);
+}
+
+/* =============================================================
+   THE SPLIT
+   One grid row: the list makes the height, the stage sticks inside
+   the column beside it.
+   ============================================================= */
+.reel{
+  display:grid;
+  /* two columns of words, four of photograph */
+  grid-template-columns:calc(var(--col) * 2) 1fr;
+}
+.reel__col{position:relative}
+
+.reel__stage{
+  position:sticky;top:0;
+  height:100svh;
+  overflow:hidden;
+  background:var(--ink-2);
+  isolation:isolate;
+}
+
+/* ---------- the photographs, one at a time ----------
+   The incoming frame wipes in from the edge the scroll came from,
+   over the one it replaces, while its image settles back from a
+   little wider. Directional, so it reads as a turn of the page
+   rather than a dissolve. */
+.reel__shots{position:absolute;inset:0}
+.shot{
+  position:absolute;inset:0;margin:0;
+  opacity:0;z-index:1;
+}
+.shot.is-prev{opacity:1;z-index:1}      /* held under the incoming frame */
+.shot.is-active{opacity:1;z-index:2}
+.shot img{
+  width:100%;height:100%;
+  object-fit:cover;
+  translate:0 var(--shift,0px);      /* scroll — must never be transitioned */
+  scale:1.04;                        /* hover — this is the one that eases */
+  filter:brightness(.9) saturate(.94);
+  transition:scale 1.1s var(--ease-out),filter .5s var(--ease-out);
+  will-change:translate,scale,filter;
+}
+
+.shot.is-entering{animation:wipeUp .92s var(--ease) both}
+.shot.is-entering.from-above{animation-name:wipeDown}
+.shot.is-entering img{animation:settle 1.25s var(--ease-out) both}
+
+@keyframes wipeUp{
+  from{clip-path:inset(100% 0 0 0)}
+  to  {clip-path:inset(0 0 0 0)}
+}
+@keyframes wipeDown{
+  from{clip-path:inset(0 0 100% 0)}
+  to  {clip-path:inset(0 0 0 0)}
+}
+@keyframes settle{
+  from{scale:1.11}
+  to  {scale:1.04}
+}
+
+/* ---------- grain ---------- */
+.reel__grain{
+  position:absolute;inset:-140px;z-index:2;
+  pointer-events:none;
+  opacity:.24;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='.62'/%3E%3C/svg%3E");
+  animation:filmgrain .9s steps(8) infinite;
+}
+@keyframes filmgrain{
+  0%  {transform:translate3d(0,0,0)}
+  12% {transform:translate3d(-14px,9px,0)}
+  25% {transform:translate3d(11px,-13px,0)}
+  37% {transform:translate3d(-9px,-7px,0)}
+  50% {transform:translate3d(13px,11px,0)}
+  62% {transform:translate3d(-12px,5px,0)}
+  75% {transform:translate3d(7px,-10px,0)}
+  87% {transform:translate3d(-6px,12px,0)}
+  100%{transform:translate3d(0,0,0)}
+}
+
+/* ---------- the photograph is the link ---------- */
+.reel__link{position:absolute;inset:0;z-index:6;display:block}
+/* the message replaces the pointer, so the static label is kept
+   only for keyboard focus */
+body.has-cursor .reel__link{cursor:none}
+
+.cursor{
+  position:fixed;top:0;left:0;z-index:90;
+  color:#fff;
+  font-family:var(--display);
+  font-size:clamp(15px,1.25vw,20px);font-weight:400;
+  letter-spacing:-.014em;
+  white-space:nowrap;
+  pointer-events:none;
+  translate:-200px -200px;
+  transform:translate(-50%,-50%) scale(.6);
+  opacity:0;
+  transition:opacity .22s var(--ease-out),transform .38s var(--ease);
+  will-change:translate,transform;
+}
+.cursor.is-on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+.reel__go{
+  position:absolute;left:var(--pad);bottom:var(--pad);
+  display:flex;align-items:center;gap:9px;
+  font-family:var(--ui);
+  font-size:11px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);
+  opacity:0;transform:translateY(8px);
+  transition:opacity .3s var(--ease-out),transform .3s var(--ease-out);
+}
+.reel__link:focus-visible .reel__go{opacity:1;transform:none}
+
+.reel__stage:has(.reel__link:hover) .shot.is-active img,
+.reel__stage:has(.reel__link:focus-visible) .shot.is-active img{
+  scale:1.1;
+  filter:brightness(.62) saturate(.86);
+}
+
+/* =============================================================
+   THE WORDS
+   ============================================================= */
+.reel__list{
+  position:relative;z-index:5;
+  background:var(--ink);
+}
+
+.slide{
+  position:relative;
+  height:100svh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:calc(var(--pad) + 78px) var(--words-gap)
+          calc(var(--pad) + 60px) 50%;
+}
+
+.slide__name{
+  margin:0;
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(27px,2.72vw,48px);
+  line-height:1.02;letter-spacing:-.028em;
+  color:var(--paper);
+}
+
+/* disciplines stacked, a rule above each */
+.slide__tags{
+  margin-top:clamp(18px,2.6vh,32px);
+  font-family:var(--display);font-weight:400;
+  font-size:16px;
+  letter-spacing:-.008em;
+  color:rgba(251,248,243,.8);
+}
+.slide__tags li{
+  display:block;
+  padding:clamp(9px,1.3vh,15px) 0;
+  border-top:1px solid rgba(251,248,243,.18);
+}
+/* the plain setting: no rules, tighter leading to hold it together */
+.slide__tags--plain li{
+  padding:0;border-top:0;
+  line-height:1.5;
+}
+
+.slide__foot{
+  /* spans the same measure as the description, so the credit lands
+     exactly on the paragraph's right edge */
+  position:absolute;
+  left:50%;right:var(--words-gap);
+  bottom:calc(var(--pad) + 4px);
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:14px;
+  color:var(--accent);
+}
+.slide__year{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(13px,1.05vw,19px);
+  letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;
+}
+.slide__by{
+  font-family:var(--display);font-weight:400;
+  font-size:12px;
+  letter-spacing:-.006em;
+  white-space:nowrap;
+}
+
+/* the description: the smallest setting still comfortable on screen */
+.slide__desc{
+  margin-top:clamp(18px,2.6vh,32px);
+  font-family:var(--display);font-weight:400;
+  font-size:12px;
+  line-height:1.62;letter-spacing:0;
+  color:rgba(251,248,243,.58);
+}
+
+/* the way into a project on narrow screens, where the pinned stage — and
+   with it the photograph that carries the link — is not drawn at all */
+.slide__go{display:none}
+
+/* ---------- entrance ---------- */
+.js .slide__name,
+.js .slide__tags,
+.js .slide__desc,
+.js .slide__go,
+.js .slide__foot{opacity:0;transform:translate3d(0,20px,0)}
+.js .slide.is-seen .slide__name,
+.js .slide.is-seen .slide__tags,
+.js .slide.is-seen .slide__desc,
+.js .slide.is-seen .slide__go,
+.js .slide.is-seen .slide__foot{
+  opacity:1;transform:none;
+  transition:opacity .75s var(--ease),transform .75s var(--ease);
+}
+.js .slide.is-seen .slide__tags{transition-delay:.1s}
+.js .slide.is-seen .slide__desc{transition-delay:.18s}
+.js .slide.is-seen .slide__foot{transition-delay:.26s}
+.js .slide.is-seen .slide__go{transition-delay:.34s}
+
+/* =============================================================
+   POSITION IN THE REEL
+   ============================================================= */
+.count{
+  position:absolute;right:var(--pad);bottom:var(--pad);z-index:7;
+  display:flex;align-items:center;gap:10px;
+  margin:0;
+  font-family:var(--ui);
+  font-size:10.5px;font-weight:500;
+  letter-spacing:.16em;
+  color:rgba(255,255,255,.72);
+  font-variant-numeric:tabular-nums;
+}
+.count i{width:20px;height:1px;background:rgba(255,255,255,.4)}
+.count__all{color:rgba(255,255,255,.45)}
+
+/* =============================================================
+   RESPONSIVE
+   ============================================================= */
+@media (max-width:1180px){
+  .page-work{--words-gap:clamp(24px,2.4vw,40px)}
+  .slide__desc{font-size:11.5px}
+}
+
+/* below this the split stops earning its keep: stack instead */
+@media (max-width:900px){
+  .reel{display:block}
+  .reel__col{display:none}
+
+  .slide{
+    height:auto;
+    padding:0 var(--pad) clamp(40px,7vh,72px);
+  }
+  .grid--fixed{display:none}
+  .slide{padding-left:var(--pad);padding-right:var(--pad)}
+  .slide__foot{position:static;left:auto;right:auto;justify-content:flex-start;gap:20px}
+  .slide__desc{max-width:62ch;font-size:13px}
+  .slide::before{
+    /* the project's own photograph, set above its words */
+    content:"";
+    display:block;
+    height:56svh;margin:0 calc(var(--pad) * -1) clamp(22px,3.4vh,34px);
+    /* --img is set inline on the <li>, but Chrome resolves a url() inside a
+       custom property against the stylesheet that USES it, not the one that
+       declares it. Hence ../assets/ in work.html: from css/ it lands on
+       /assets/, and from the document a leading .. collapses to the same
+       place. Plain assets/ 404s here as /css/assets/. */
+    background:var(--img) center/cover no-repeat var(--ink-2);
+    filter:brightness(.9) saturate(.94);
+  }
+  .slide:first-child{padding-top:calc(var(--pad) + 62px)}
+  .slide__name{font-size:clamp(30px,6.4vw,52px)}
+  .slide__foot{margin-top:18px}
+
+  .slide__go{
+    /* the slide is a column flexbox, so without this the link stretches to
+       the full measure and the hit area runs far past the words */
+    align-self:flex-start;
+    display:inline-flex;align-items:center;gap:9px;
+    margin-top:clamp(18px,2.6vh,28px);
+    font-family:var(--display);font-weight:400;
+    font-size:15px;letter-spacing:-.012em;
+    color:var(--accent);
+  }
+}
+
+@media (max-width:600px){
+  .page-work .logo__wordmark{height:26px}
+  .page-work .menu{top:auto;bottom:calc(var(--pad) + 8px)}
+  .slide::before{height:48svh}
+  .slide__name{font-size:clamp(28px,8vw,42px)}
+  .slide__tags{font-size:15px}
+}
+
+/* =============================================================
+   MOTION PREFERENCES
+   ============================================================= */
+@media (max-width:900px){
+  .cursor{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .cursor{transition:opacity .15s linear}
+  .shot.is-entering,
+  .shot.is-entering img{animation:none!important}
+  .shot img{translate:none!important}
+  .js .slide__name,
+  .js .slide__tags,
+  .js .slide__year{opacity:1!important;transform:none!important}
+  .shot{transition:opacity .2s linear;transform:none!important}
+  .shot img{transform:scale(1.04)!important}
+  .reel__grain{animation:none}
+}

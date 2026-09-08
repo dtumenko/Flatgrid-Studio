@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flatgrid Studio — Design &amp; Branding</title>
+<meta name="description" content="Flatgrid Studio. We use the power of design to help diverse clients grow their business. Branding, visual identity, web design and art direction.">
+<meta name="theme-color" content="#141415">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Flatgrid Studio — Design &amp; Branding">
+<meta property="og:description" content="We use the power of design to help diverse clients grow their business.">
+<meta property="og:image" content="assets/hero-bg.jpg">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/logo-mark.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap">
+
+<link rel="preload" as="image" href="assets/hero-bg.jpg" fetchpriority="high">
+<link rel="stylesheet" href="css/style.css">
+<script>document.documentElement.className='js';try{var x=sessionStorage.getItem('fg:xfade');if(x){var c=document.documentElement.classList;c.add('is-arriving');if(x==='ink')c.add('is-ink')}}catch(e){}</script>
+</head>
+<body>
+
+<!-- the menu's panels, held across a page change -->
+<div class="curtain" id="curtain" aria-hidden="true">
+  <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i>
+  <i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i>
+</div>
+
+<!-- ─────────────────────────────  LOADER  ───────────────────────────── -->
+<div class="loader" id="loader" role="status" aria-label="Loading Flatgrid Studio">
+  <video class="loader__video" id="loaderVideo"
+         src="assets/loader.mp4"
+         muted playsinline autoplay preload="auto"
+         aria-hidden="true"></video>
+
+  <!-- shown only if the video cannot play (autoplay blocked / codec / slow net) -->
+  <img class="loader__fallback" src="assets/logo-wordmark.svg" alt="" aria-hidden="true" width="240" height="150">
+
+  <div class="loader__bar" aria-hidden="true"><i id="loaderProgress"></i></div>
+  <button class="loader__skip" type="button" id="loaderSkip">Skip<span aria-hidden="true"> &rarr;</span></button>
+</div>
+
+<!-- ─────────────────────────────   HERO   ───────────────────────────── -->
+<main class="hero" id="hero">
+
+  <!-- stage: photograph, grain, vignette -->
+  <div class="stage" aria-hidden="true">
+    <div class="stage__img reveal" style="--delay:1.55s"></div>
+    <div class="stage__sheen"></div>
+    <div class="stage__vignette"></div>
+    <div class="stage__grain"></div>
+  </div>
+
+  <!-- structural grid -->
+  <div class="grid" aria-hidden="true">
+    <span class="grid__rule reveal" style="--delay:.00s"></span>
+    <span class="grid__rule reveal" style="--delay:.07s"></span>
+    <span class="grid__rule reveal" style="--delay:.14s"></span>
+    <span class="grid__rule reveal" style="--delay:.21s"></span>
+    <span class="grid__rule reveal" style="--delay:.28s"></span>
+  </div>
+
+  <!-- registration ticks where the head rule meets the grid -->
+  <div class="ticks" aria-hidden="true">
+    <span class="tick reveal" style="--delay:.62s"></span>
+    <span class="tick reveal" style="--delay:.66s"></span>
+    <span class="tick reveal" style="--delay:.70s"></span>
+    <span class="tick reveal" style="--delay:.74s"></span>
+    <span class="tick reveal" style="--delay:.78s"></span>
+  </div>
+
+  <span class="rule rule--head reveal" style="--delay:.58s" aria-hidden="true"></span>
+  <span class="rule rule--foot reveal" style="--delay:1.35s" aria-hidden="true"></span>
+
+  <!-- ── masthead ── -->
+  <header class="masthead">
+    <p class="note note--a reveal" style="--delay:.74s">
+      A good design is created<br>by <em>definition</em>.
+    </p>
+    <p class="note note--b reveal" style="--delay:.82s">
+      A good design is knowing<br>which mistakes you can <em>keep</em>.
+    </p>
+  </header>
+
+  <!-- ── call to action: fills the top-right cell of the grid ──
+       Interim destination is email. Replace href with the Google Calendar
+       booking link (https://calendar.app.google/…) once it exists — see README. -->
+  <a class="cta" href="mailto:flatgrid.studio@gmail.com?subject=Project%20enquiry" id="cta">
+    <span class="cta__title">Book a call</span>
+    <svg class="cta__arrow" viewBox="0 0 20 20" width="19" height="19" aria-hidden="true" focusable="false">
+      <path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor"
+            stroke-width="1.7" stroke-linecap="square"/>
+    </svg>
+  </a>
+
+  <!-- ── statement ── -->
+  <div class="statement">
+    <p class="eyebrow reveal" style="--delay:1.12s">
+      <span class="eyebrow__idx">01</span> Design &amp; Branding Studio
+    </p>
+
+    <h1 class="headline" id="headline">
+      <span class="headline__line"><span>We use power of design</span></span>
+      <span class="headline__line"><span>to help diverse clients grow</span></span>
+      <span class="headline__line"><span>their <em>business.</em></span></span>
+    </h1>
+
+    <div class="services reveal" style="--delay:1.90s">
+      <div class="services__rule" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <ul class="services__list">
+        <li>Branding</li>
+        <li>Visual Identity</li>
+        <li>Web Design</li>
+        <li>Art Direction</li>
+        <li>Editorial Design</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ── status bar ── -->
+  <footer class="status">
+    <p class="status__item reveal" style="--delay:2.05s">
+      <span class="dot" aria-hidden="true"></span> Available for new projects
+    </p>
+    <p class="status__item status__item--mid reveal" style="--delay:2.12s">
+      Flatgrid Studio<sup>&reg;</sup>
+    </p>
+    <p class="status__item status__item--end reveal" style="--delay:2.19s">
+      Local <time id="clock">--:--:--</time>
+    </p>
+  </footer>
+
+</main>
+
+<!-- ─────────────────────────────   NAV   ───────────────────────────── -->
+<nav class="nav" id="nav" aria-hidden="true" aria-label="Main">
+
+  <!-- the transition itself: one panel per column, alternating direction -->
+  <div class="nav__panels" aria-hidden="true">
+    <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i>
+    <i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i>
+  </div>
+
+  <div class="nav__grid" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <ul class="nav__list">
+    <li><a href="work.html">Work</a></li>
+    <li><a href="studio.html">Studio</a></li>
+    <li><a href="academy.html">Flatgrid Academy</a></li>
+    <li><a href="templates.html">Design Templates</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+
+  <p class="nav__foot"><a href="mailto:flatgrid.studio@gmail.com">flatgrid.studio@gmail.com</a></p>
+</nav>
+
+<!-- Chrome that outlives the page change: it sits above the overlay and
+     recolours to black when the menu is open. -->
+<a class="logo reveal" style="--delay:.60s" href="/" aria-label="Flatgrid Studio — home">
+  <img class="logo__wordmark" src="assets/logo-wordmark.svg" alt="Flatgrid Studio" width="200" height="125">
+  <img class="logo__mark" src="assets/logo-mark-menu.svg" alt="" aria-hidden="true" width="513" height="304">
+</a>
+
+<ul class="social">
+  <li class="reveal" style="--delay:1.00s">
+    <a href="https://www.behance.net/flatgrid" aria-label="Flatgrid Studio on Behance" rel="noopener noreferrer" target="_blank">
+      <svg viewBox="-0.4 4.2 26.6 17.2" width="22" height="14" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M8.02 4.6c.84 0 1.56.07 2.19.22.62.15 1.15.38 1.58.7.44.32.77.75 1 1.28.22.53.33 1.18.33 1.94 0 .82-.19 1.51-.57 2.06-.37.55-.92.99-1.65 1.34.99.28 1.74.79 2.22 1.5.49.72.73 1.58.73 2.6 0 .82-.16 1.53-.48 2.13-.32.6-.75 1.09-1.29 1.47-.54.38-1.16.66-1.86.84-.69.18-1.4.27-2.13.27H0V4.6h8.02Zm-.47 6.2c.69 0 1.26-.16 1.7-.49.45-.33.67-.86.67-1.6 0-.41-.08-.75-.22-1.01a1.6 1.6 0 0 0-.59-.61 2.4 2.4 0 0 0-.85-.31 5.6 5.6 0 0 0-1-.09H3.4v4.11h4.15Zm.23 6.51c.41 0 .81-.04 1.18-.12.38-.08.71-.21 1-.4.28-.19.51-.44.68-.77.17-.32.25-.74.25-1.24 0-.98-.28-1.68-.83-2.1-.55-.42-1.28-.63-2.19-.63H3.4v5.26h4.38ZM18.4 17.4c.46.45 1.12.67 1.98.67.62 0 1.15-.15 1.6-.46.44-.31.72-.64.82-.99h2.68c-.43 1.33-1.09 2.28-1.97 2.85-.88.57-1.95.86-3.2.86a6.4 6.4 0 0 1-2.35-.42 4.87 4.87 0 0 1-1.77-1.19 5.35 5.35 0 0 1-1.12-1.85 6.8 6.8 0 0 1-.39-2.37c0-.83.13-1.6.4-2.32a5.4 5.4 0 0 1 2.92-3.1 5.75 5.75 0 0 1 2.31-.45c.95 0 1.78.18 2.49.55.71.37 1.29.87 1.75 1.49.45.63.78 1.34.98 2.14.2.8.27 1.64.21 2.51h-7.79c0 .89.27 1.63.65 2.08Zm3.5-5.64c-.37-.4-1-.62-1.78-.62a2.6 2.6 0 0 0-1.28.28c-.33.19-.6.42-.8.7-.2.28-.34.57-.42.88-.08.31-.13.58-.14.82h4.83c-.14-.76-.35-1.32-.72-1.72l.31-.34ZM16.9 5.9h6.03v1.6H16.9V5.9Z"/>
+      </svg>
+    </a>
+  </li>
+  <li class="reveal" style="--delay:1.07s">
+    <a href="https://www.linkedin.com/company/flatgrid-studio" aria-label="Flatgrid Studio on LinkedIn" rel="noopener noreferrer" target="_blank">
+      <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false">
+        <rect x="1.6" y="1.6" width="20.8" height="20.8" rx="4.4"
+              fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <circle cx="7.1" cy="7.1" r="1.45" fill="currentColor"/>
+        <rect x="6.05" y="9.9" width="2.1" height="7.5" fill="currentColor"/>
+        <path fill="currentColor" d="M10.6 9.9h2v1.06a3.2 3.2 0 0 1 2.53-1.24c2.02 0 2.99 1.28 2.99 3.5v4.19h-2.1v-3.86c0-1.25-.46-1.87-1.5-1.87-1.02 0-1.82.65-1.82 1.98v3.75h-2.1V9.9Z"/>
+      </svg>
+    </a>
+  </li>
+  <li class="reveal" style="--delay:1.14s">
+    <a href="https://www.instagram.com/flatgrid.studio/" aria-label="Flatgrid Studio on Instagram" rel="noopener noreferrer" target="_blank">
+      <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false">
+        <rect x="1.6" y="1.6" width="20.8" height="20.8" rx="5.6"
+              fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+      </svg>
+    </a>
+  </li>
+</ul>
+
+<button class="menu reveal" style="--delay:.90s" type="button" id="menuBtn"
+        aria-expanded="false" aria-controls="nav">
+  <span class="menu__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span class="menu__label">
+    <span class="menu__word menu__word--open">Menu</span>
+    <span class="menu__word menu__word--close" aria-hidden="true">Close</span>
+  </span>
+</button>
+
+<script src="js/main.js"></script>
+</body>
+</html>
