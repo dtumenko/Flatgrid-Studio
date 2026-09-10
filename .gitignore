@@ -18,3 +18,5 @@ node_modules/
 # Recorder output (node_modules/ above already covers tools/node_modules)
 tools/out/
 flatgrid-walkthrough.mp4
+tools/audit/
+tools/out-hq/
