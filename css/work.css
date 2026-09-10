@@ -6,7 +6,13 @@
    ============================================================= */
 
 .page-work{
-  overflow-x:hidden;
+  /* The reset closes the body: height:100% with overflow:hidden. That
+     propagates to the viewport, and the only reason the desktop ever
+     scrolled is that Lenis moves it programmatically. Lenis is off on
+     touch, so a phone had nothing to translate a swipe into and the page
+     could not move at all. Every other page opens this; so does this one. */
+  height:auto;
+  overflow:visible;
   background:var(--ink);
   /* the words start clear of the rail control, which keeps the left edge */
   /* breathing room between the end of a line and the frame */
@@ -30,14 +36,7 @@
 /* =============================================================
    CHROME
    ============================================================= */
-.page-work .logo{
-  position:fixed;z-index:70;
-  top:var(--pad);left:var(--pad);
-}
-.page-work .menu{
-  position:fixed;z-index:70;
-  left:calc(var(--pad) - 10px);top:calc(50% - 24px);
-}
+/* the wordmark and the rail are positioned once, in style.css */
 
 /* =============================================================
    THE SPLIT
@@ -316,7 +315,9 @@ body.has-cursor .reel__link{cursor:none}
        the full measure and the hit area runs far past the words */
     align-self:flex-start;
     display:inline-flex;align-items:center;gap:9px;
-    margin-top:clamp(18px,2.6vh,28px);
+    /* the only way into a project on a phone, so it is worth hitting */
+    padding:13px 0;
+    margin-top:clamp(8px,1.4vh,16px);
     font-family:var(--display);font-weight:400;
     font-size:15px;letter-spacing:-.012em;
     color:var(--accent);
@@ -324,8 +325,6 @@ body.has-cursor .reel__link{cursor:none}
 }
 
 @media (max-width:600px){
-  .page-work .logo__wordmark{height:26px}
-  .page-work .menu{top:auto;bottom:calc(var(--pad) + 8px)}
   .slide::before{height:48svh}
   .slide__name{font-size:clamp(28px,8vw,42px)}
   .slide__tags{font-size:15px}

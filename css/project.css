@@ -46,8 +46,7 @@
    sit over ink at the cover and over paper below it, so each one
    turns dark when the paper reaches it — see js/project.js.
    ============================================================= */
-.page-project .logo{position:fixed;z-index:70;top:var(--pad);left:var(--pad)}
-.page-project .menu{position:fixed;z-index:70;left:calc(var(--pad) - 10px);top:calc(50% - 24px)}
+/* the wordmark and the rail are positioned once, in style.css */
 
 .logo.on-paper .logo__wordmark{opacity:0}
 .logo.on-paper .logo__mark{opacity:1}
@@ -394,8 +393,6 @@
   .cover__label{left:var(--pad)}
   .cover__cue{display:none}
 
-  /* no column to spare here, so the rail goes to the corner instead */
-  .page-project .menu{top:auto;bottom:calc(var(--pad) + 8px)}
   .plate{margin-left:var(--pad)}
 
   .cols{display:none}
@@ -416,7 +413,6 @@
 }
 
 @media (max-width:600px){
-  .page-project .logo__wordmark{height:26px}
   .brief__name{font-size:clamp(28px,8.4vw,44px)}
 }
 

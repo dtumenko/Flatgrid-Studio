@@ -701,12 +701,44 @@ body.nav-open .social a:hover{color:var(--accent)}
 
   .note--a{left:50%;max-width:calc(50% - 26px)}
 
-  .menu{top:auto;bottom:calc(var(--pad) + 78px)}
+  /* ---------- chrome, on a narrow screen ----------
+     Fixed chrome lands on whatever the layout has reflowed underneath it.
+     Below this width the rail control goes to the corner a thumb reaches
+     for, and the wordmark stops being fixed so it scrolls away with the
+     page instead of sitting on the text. This governs every page — the
+     page stylesheets no longer position the chrome themselves. */
+  .logo{
+    position:absolute;
+    top:calc(var(--pad) - 10px);left:calc(var(--pad) - 10px);
+    padding:10px;                        /* a hit area worth aiming at */
+  }
+
+  .menu{
+    top:calc(var(--pad) - 13px);bottom:auto;
+    left:auto;right:calc(var(--pad) - 10px);
+    flex-direction:row-reverse;          /* bars nearest the edge */
+    gap:10px;padding:13px 10px;          /* 45px tall: a real target */
+    /* it stays fixed, so content scrolls under it — this keeps it legible
+       over whatever happens to be passing beneath */
+    background:rgba(20,20,21,.62);
+    -webkit-backdrop-filter:blur(10px);
+    backdrop-filter:blur(10px);
+  }
+  .page-sheet .menu{background:rgba(255,255,255,.68)}
+  /* over the open menu it needs neither */
+  body.nav-open .menu{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+
+  /* The wordmark scrolls away, which is what was asked for — but it is also
+     the only way home, and the menu carries no Home item. So it comes back,
+     pinned, for as long as the menu is open. */
+  body.nav-open .logo{position:fixed}
+
   .social{
     left:auto;right:var(--pad);
-    bottom:calc(var(--pad) + 78px);
-    flex-direction:row;gap:20px;
+    bottom:calc(var(--pad) + 46px);
+    flex-direction:row;gap:6px;
   }
+  .social a{padding:12px 7px;margin:-12px -7px}
   .statement{
     left:var(--pad);right:var(--pad);padding-left:0;
     bottom:calc(var(--pad) + 122px);
@@ -733,25 +765,32 @@ body.nav-open .social a:hover{color:var(--accent)}
   .nav__panels i:nth-child(4){display:none}
   .nav__list li{font-size:clamp(28px,8.8vw,42px)}
 
-  .rule--head{top:calc(var(--pad) + 46px);right:calc(var(--col) * 2 + 20px)}
-  .tick{display:none}                    /* all of them fall under the CTA */
+  /* clear of the rail control, which now sits in that corner */
+  .rule--head{top:calc(var(--pad) + 44px);right:var(--pad)}
+  .tick{display:none}
+
+  /* The call to action comes off the top-right corner, where it was a
+     260px slab against the very edge of the screen and in the way of the
+     one control everybody reaches for. It sits at the foot instead,
+     sized to its own words. */
   .cta{
-    width:calc(var(--col) * 2);
-    height:calc(var(--pad) + 46px);
+    top:auto;right:auto;
+    left:var(--pad);bottom:calc(var(--pad) + 34px);
+    width:auto;height:auto;
+    padding:15px 18px;
   }
+  .js .cta{transform-origin:left center}
+
   .logo img{height:27px}
-  .note{
-    position:static;margin:26px 0 0 var(--pad);
-    max-width:30ch;padding-left:0;
-    font-size:11.5px;
-  }
+  /* the aphorisms have no column left to sit in: at this width they were
+     printing straight over the wordmark */
+  .note{display:none}
   .headline{font-size:clamp(29px,7.6vw,44px);letter-spacing:-.025em}
   .statement{bottom:calc(var(--pad) + 128px)}
   .nav__list{left:var(--pad);bottom:calc(var(--pad) + 38px)}
   .services__list{font-size:10px;letter-spacing:.1em}
   .services__list li:not(:last-child)::after{margin:0 8px}
-  .menu{bottom:calc(var(--pad) + 66px)}
-  .social{bottom:calc(var(--pad) + 66px);gap:18px}
+  .social{bottom:calc(var(--pad) + 44px)}
   .rule--foot{bottom:calc(var(--pad) + 28px)}
   .status{font-size:9.5px;letter-spacing:.1em}
   /* full width of the column on a phone — the easiest possible tap target */

@@ -18,10 +18,7 @@
 .page-dark {background:var(--ink); color:var(--paper); --rule:rgba(251,248,243,.10)}
 
 /* ---------- chrome ---------- */
-.page-sheet .logo,
-.page-dark  .logo{position:fixed;z-index:70;top:var(--pad);left:var(--pad)}
-.page-sheet .menu,
-.page-dark  .menu{position:fixed;z-index:70;left:calc(var(--pad) - 10px);top:calc(50% - 24px)}
+/* the wordmark and the rail are positioned once, in style.css */
 
 /* a sheet is white all the way down, so the wordmark simply wears its
    brandmark — the same swap the menu page makes, no measuring needed */
@@ -383,13 +380,10 @@
   .soon__meta{padding:0;margin-top:clamp(26px,4.4vh,44px)}
   .soon__ping{display:inline-block;margin-top:clamp(26px,4.4vh,44px)}
 
-  .page-sheet .menu,
-  .page-dark  .menu{top:auto;bottom:calc(var(--pad) + 8px)}
 }
 
 @media (max-width:600px){
-  .page-sheet .logo__mark,
-  .page-dark  .logo__wordmark{height:26px}
+  .page-sheet .logo__mark{height:26px}
 }
 
 /* =============================================================
