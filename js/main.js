@@ -107,10 +107,18 @@
     window.setTimeout(function () { window.location.href = href; }, hold);
   });
 
-  /* Restored from the back/forward cache with the panels still closed:
-     clear them, or the way back is a white screen. */
+  /* Restored from the back/forward cache, a page comes back exactly as it
+     was left — and it was left mid-departure. Every part of that state has
+     to be undone here or the visitor lands on the leftovers of a transition
+     that will never finish.
+
+     There are two halves to it. The curtain is one; the menu is the other,
+     and the menu was the half that was missing: pressing Back arrived on
+     panels still up with their words faded out and the chrome faded out
+     with them, which is a white screen with nothing on it. */
   window.addEventListener('pageshow', function () {
     going = false;
+
     doc.documentElement.classList.remove('is-leaving');
     if (curtain) curtain.classList.remove('is-in');
 
@@ -121,6 +129,12 @@
     if (!doc.documentElement.classList.contains('is-arriving')) {
       doc.documentElement.classList.remove('is-ink');
     }
+
+    /* `is-open` deliberately stays: the menu is what the visitor was
+       looking at when they left, so that is what Back should give them
+       back. Only the leaving is undone. */
+    body.classList.remove('is-leaving');
+    if (nav) nav.classList.remove('is-leaving');
   });
 
   /* ---------------------------------------------------------

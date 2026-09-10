@@ -322,7 +322,8 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   display:flex;flex-direction:column;gap:26px;
 }
 .social a{
-  display:block;color:rgba(251,248,243,.72);
+  /* white, as the marks are drawn: they are solid glyphs now, not outlines */
+  display:block;color:var(--paper);
   transition:color var(--t-hover) var(--ease-out),
              transform .22s var(--ease-out);
 }
