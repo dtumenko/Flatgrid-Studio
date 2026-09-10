@@ -1,0 +1,12 @@
+{
+  "name": "flatgrid-studio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/dev-server.mjs"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3"
+  }
+}

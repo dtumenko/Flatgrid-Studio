@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>CMS — Flatgrid Studio</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/cms.css">
+</head>
+<body>
+  <div id="cms-root"></div>
+
+  <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script>
+    // repo i siteUrl vaze samo za GitHub rezim (kad panel stoji na zivom
+    // sajtu). Lokalno se ne koriste — tamo panel pise pravo na disk.
+    window.CMS_CONFIG = {
+      repo: "Chevu13/dekidemo",
+      branch: "main",
+      siteUrl: "https://flatgrid.studio",
+      contentDir: "content/work",
+      mediaFolder: "assets/uploads",
+
+      // Ko opsluzuje prijavu na zivom sajtu:
+      //   Vercel  — obrisi/zakomentarisi red ispod (koristi api/auth.js)
+      //   Netlify — otkomentarisi ga i upisi ime svog sajta u site_id
+      // oauthUrl: "https://api.netlify.com/auth?provider=github&site_id=IME-SAJTA.netlify.app&scope=repo",
+    };
+  </script>
+  <script src="/admin/cms.js"></script>
+</body>
+</html>

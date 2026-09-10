@@ -37,6 +37,25 @@ Open `index.html`, or serve the folder:
 npx serve . -l 5178
 ```
 
+## CMS
+
+Projects are no longer hand-written HTML. Each project is one file in
+`content/work/`, and `scripts/build.mjs` generates `project-<slug>.html` and
+rewrites `work.html` from them. They are edited in a panel at `/admin`.
+
+```bash
+npm install
+npm run dev      # http://localhost:5178/admin/
+```
+
+`work.html`, `project-*.html` and `sitemap.xml` are **generated** — edit
+`templates/project.html` and `templates/work.html` for the layout, and the
+panel for the content. See **[CMS.md](CMS.md)** for the full guide (in
+Serbian), including the GitHub-backed mode for the live site.
+
+The *Adding a project* steps below are superseded by the panel; they are kept
+for reference on what the generated markup has to contain.
+
 ## Design notes
 
 Built on the brand board and on the studio's own hero animation, balanced with the
@@ -242,7 +261,7 @@ screen and the wordmark at the top, and they do not cross the boundary at the sa
 moment. Over paper the wordmark swaps to the brandmark, the same swap the menu
 page uses. See `tone()` in `js/project.js`.
 
-### Adding a project
+### Adding a project (by hand — superseded)
 
 1. Copy `project-vellor.html` to `project-<slug>.html`.
 2. Change the title, description and og: tags in `<head>`, the cover image and

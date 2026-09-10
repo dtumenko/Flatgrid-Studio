@@ -11,3 +11,6 @@ assets/background.jpg
 Thumbs.db
 desktop.ini
 *.swp
+
+# Node
+node_modules/

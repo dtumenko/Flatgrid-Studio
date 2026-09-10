@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap">
 
-<link rel="preload" as="image" href="assets/work-vellor.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="{{FIRST_COVER}}" fetchpriority="high">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/work.css">
 <script>document.documentElement.className='js';try{var x=sessionStorage.getItem('fg:xfade');if(x){var c=document.documentElement.classList;c.add('is-arriving');if(x==='ink')c.add('is-ink')}}catch(e){}</script>
@@ -53,65 +53,16 @@
 <main class="reel" id="reel">
 
   <ol class="reel__list">
-      <li class="slide" id="vellor" style="--img:url(../assets/work-vellor-m.jpg)">
-        <h2 class="slide__name">Vellor Residency</h2>
-        <ul class="slide__tags slide__tags--plain">
-          <li>Branding</li>
-          <li>Visual identity</li>
-          <li>Art direction</li>
-        </ul>
-        <p class="slide__desc">Vellor Residency is a contemporary residential development designed for modern urban living — a gated complex offering luxury apartments, private amenities, and rooftop penthouses, set for completion in 2028. The brief called for a brand identity that communicates architectural clarity.</p>
-        <span class="slide__foot">
-          <span class="slide__year"><time datetime="2026">2026</time></span>
-          <span class="slide__by">Flatgrid Studio</span>
-        </span>
-        <a class="slide__go" data-xfade="none" href="project-vellor.html">Open project<svg viewBox="0 0 20 20" width="13" height="13" aria-hidden="true" focusable="false"><path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
-      </li>
-      <li class="slide" id="pletho" style="--img:url(../assets/work-pletho-m.jpg)">
-        <h2 class="slide__name">Pletho</h2>
-        <ul class="slide__tags slide__tags--plain">
-          <li>Branding</li>
-          <li>Art direction</li>
-          <li>Web design</li>
-        </ul>
-        <p class="slide__desc">Pletho is a medical device firm focused on making life easier for people with fine motor and dexterity challenges.</p>
-        <span class="slide__foot">
-          <span class="slide__year"><time datetime="2026">2026</time></span>
-          <span class="slide__by">Flatgrid Studio</span>
-        </span>
-        <a class="slide__go" data-xfade="none" href="project-pletho.html">Open project<svg viewBox="0 0 20 20" width="13" height="13" aria-hidden="true" focusable="false"><path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
-      </li>
-      <li class="slide" id="nordarch" style="--img:url(../assets/work-nordarch-m.jpg)">
-        <h2 class="slide__name">Nordarch</h2>
-        <ul class="slide__tags slide__tags--plain">
-          <li>Visual identity</li>
-          <li>Editorial design</li>
-          <li>Web design</li>
-        </ul>
-        <p class="slide__desc">Nordarch is an architecture studio working across residential and cultural projects.</p>
-        <span class="slide__foot">
-          <span class="slide__year"><time datetime="2026">2026</time></span>
-          <span class="slide__by">Flatgrid Studio</span>
-        </span>
-        <a class="slide__go" data-xfade="none" href="project-nordarch.html">Open project<svg viewBox="0 0 20 20" width="13" height="13" aria-hidden="true" focusable="false"><path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
-      </li>
+{{SLIDES}}
   </ol>
 
   <div class="reel__col">
     <div class="reel__stage">
       <div class="reel__shots">
-      <figure class="shot" data-href="project-vellor.html" data-name="Vellor Residency">
-        <img src="assets/work-vellor.jpg" alt="Vellor Residency hoarding on a construction site, reading Everything, Within." width="2000" height="1179" loading="eager" fetchpriority="high" decoding="async">
-      </figure>
-      <figure class="shot" data-href="project-pletho.html" data-name="Pletho">
-        <img src="assets/work-pletho.jpg" alt="Pletho poster campaign on a street-side display, reading Your Dignity Restored." width="2000" height="1179" loading="lazy" decoding="async">
-      </figure>
-      <figure class="shot" data-href="project-nordarch.html" data-name="Nordarch">
-        <img src="assets/work-nordarch.jpg" alt="Nordarch branded drawing tubes in blue and black on a dark surface." width="2000" height="1179" loading="lazy" decoding="async">
-      </figure>
+{{SHOTS}}
       </div>
       <span class="reel__grain" aria-hidden="true"></span>
-      <a class="reel__link" id="reelLink" data-xfade="none" href="project-vellor.html" aria-label="Open Vellor Residency">
+      <a class="reel__link" id="reelLink" data-xfade="none" href="project-{{FIRST_SLUG}}.html" aria-label="Open {{FIRST_TITLE}}">
         <span class="reel__go">
           View project
           <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" focusable="false">
@@ -120,7 +71,7 @@
           </svg>
         </span>
       </a>
-      <p class="count" aria-hidden="true"><span id="countNow">01</span><i></i><span class="count__all">03</span></p>
+      <p class="count" aria-hidden="true"><span id="countNow">01</span><i></i><span class="count__all">{{COUNT}}</span></p>
     </div>
   </div>
 
@@ -152,4 +103,3 @@
 <script src="js/work.js"></script>
 </body>
 </html>
-<!-- generated by scripts/build.mjs -->
