@@ -775,10 +775,15 @@ body.nav-open .social a:hover{color:var(--accent)}
      sized to its own words. */
   .cta{
     top:auto;right:auto;
-    left:var(--pad);bottom:calc(var(--pad) + 34px);
-    width:auto;height:auto;
-    padding:15px 18px;
+    /* the mirror of the desktop treatment: there it fills the top-right
+       cell outright, here the bottom-left one — page edge on one side,
+       the first column rule on the other */
+    left:0;bottom:calc(var(--pad) + 34px);
+    width:var(--col);height:auto;
+    padding:15px var(--pad);
+    gap:8px;
   }
+  .cta__title{font-size:14px}
   .js .cta{transform-origin:left center}
 
   .logo img{height:27px}

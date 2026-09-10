@@ -155,11 +155,17 @@ function renderSlides(projects) {
       const tags = list(p.disciplines)
         .map((t) => `          <li>${esc(t)}</li>`)
         .join("\n");
-      // --img se cita iz css/work.css, pa se putanja racuna od css/ foldera.
+      // Na telefonu je thumbnail i sam link na projekat, ne samo dugme ispod
+      // teksta. Pravi <img> u <a>, umesto background-image preko ::before:
+      // slika se tako moze kliknuti, a i putanja vise ne zavisi od toga
+      // odakle se custom property cita.
       const thumb = p.thumb || p.cover || "";
-      const bg = thumb ? ` style="--img:url(../${esc(thumb)})"` : "";
-      return `      <li class="slide" id="${esc(p.slug)}"${bg}>
-        <h2 class="slide__name">${esc(p.title)}</h2>
+      const shot = thumb
+        ? `        <a class="slide__shot" data-xfade="none" href="project-${esc(p.slug)}.html" aria-hidden="true" tabindex="-1"><img src="${esc(thumb)}" alt="" loading="lazy" decoding="async"></a>
+`
+        : "";
+      return `      <li class="slide" id="${esc(p.slug)}">
+${shot}        <h2 class="slide__name">${esc(p.title)}</h2>
         <ul class="slide__tags slide__tags--plain">
 ${tags}
         </ul>
