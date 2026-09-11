@@ -18,7 +18,7 @@ import matter from "gray-matter";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CONTENT_DIR = path.join(ROOT, "content/work");
-const SITE_URL = "https://flatgrid.studio";
+const SITE_URL = "https://flatgridstudio.com";
 
 /* --------------------------------------------------------------- helpers */
 
@@ -131,6 +131,10 @@ function buildProjectPage(project, next, template) {
     .replace(/\{\{DESCRIPTION\}\}/g, esc(project.meta_description || project.summary || ""))
     .replace(/\{\{COVER_ALT\}\}/g, esc(project.cover_alt || project.title))
     .replace(/\{\{COVER\}\}/g, esc(cover))
+    // Open Graph ignores relative paths: bez ovoga LinkedIn i Slack ne
+    // pokazuju sliku kad se link podeli.
+    .replace(/\{\{OG_IMAGE\}\}/g, esc(cover ? SITE_URL + "/" + cover : ""))
+    .replace(/\{\{OG_URL\}\}/g, esc(SITE_URL + "/project-" + project.slug + ".html"))
     .replace(/\{\{LINE\}\}/g, esc(project.line || ""))
     .replace(/\{\{LEAD\}\}/g, esc(project.lead || project.summary || ""))
     .replace(/\{\{DISCIPLINES\}\}/g, renderDisciplines(project.disciplines))
