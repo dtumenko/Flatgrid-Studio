@@ -3,23 +3,17 @@ title: Pletho
 slug: pletho
 status: Live
 order: 2
-year: 2026
-line: Identity and web design for a medical device firm
+year: '2023'
+line: Identity and campaign for a medical device firm
 disciplines:
-  - Branding
-  - Art direction
-  - Web design
-timeline: 8 weeks
+  - Brand identity
+  - Creative direction
+  - Packaging design
+timeline: 10 weeks
 client: Pletho
-summary: >-
-  Pletho is a medical device firm focused on making life easier for people with
-  fine motor and dexterity challenges.
-lead: >-
-  Pletho is a medical device firm focused on making life easier for people with
-  fine motor and dexterity challenges.
-meta_description: >-
-  Pletho — branding, art direction and web design by Flatgrid Studio for a
-  medical device firm working on fine motor and dexterity challenges.
+summary: A health tech start up focused on developing assistive products that improve everyday independence for people living with fine motor control conditions.
+lead: The brand was created from the ground up to position Pletho as a forward-thinking, human-centered technology company. Rather than emphasizing limitation, the identity communicates empowerment, precision, and calm support through design.
+meta_description: Pletho — branding, art direction and web design by Flatgrid Studio for a medical device firm working on fine motor and dexterity challenges.
 cover: assets/work-pletho.jpg
 cover_alt: Pletho poster campaign on a street-side display, reading Your Dignity Restored.
 thumb: assets/work-pletho-m.jpg
@@ -27,26 +21,44 @@ blocks:
   - type: plate
     src: assets/work-pletho.jpg
     alt: Pletho poster campaign on a street-side display, reading Your Dignity Restored.
-  - type: empty
-    label: Image 02
+  - type: plate
+    src: assets/uploads/mtu6nzfi-logo-design.jpg
+    alt: Wordmark design
+  - type: plate
+    src: assets/uploads/mtu6obe0-brand-manual.jpg
+    alt: Brand guidelines
+  - type: plate
+    src: assets/uploads/mtu6oq6l-logo.jpg
+    alt: Identity system
+  - type: plate
+    src: assets/uploads/mtu6p5h4-artboard-1.jpg
+    alt: 'Digital advertizing '
+  - type: plate
+    src: assets/uploads/mtu6pbnh-stationary-business-card.jpg
+    alt: Brand stationary design
+  - type: plate
+    src: assets/uploads/mtu6plqt-stationary-letterhead.jpg
+    alt: Brand stationary design
+  - type: plate
+    src: assets/uploads/mtu6puul-photo-logo.jpg
+    alt: Advertizing
+  - type: plate
+    src: assets/uploads/mtu6px85-apple-display-free-mockup.jpg
+    alt: Investor deck presentation design
   - type: chapter
-    label: The problem
-    head: Assistive design is still designed apologetically.
-    text: |-
-      Products in this category tend to look like equipment: clinical blues, soft rounded shapes, photography that centres the difficulty rather than the person. The design says accommodation, and the person using it hears it.
-
-      Pletho needed the opposite register — an identity that reads as a considered object somebody chose, not a device somebody was issued.
-  - type: empty
-    label: Image 03
-  - type: empty
-    label: Image 04
-  - type: chapter
-    label: The approach
-    head: Dignity, stated plainly.
-    text: |-
-      The campaign line does the work directly. Your Dignity Restored is set at poster scale in the same grotesque the rest of the system uses, with no qualifier and no softening image behind it.
-
-      Around it the system stays quiet: one weight, one accent, generous rules, and photography that keeps the product in the hand rather than on a white sweep.
-  - type: empty
-    label: Image 05
+    label: SPN1 Product
+    head: ''
+    text: SPN1 is Pletho's flagship product — an ambient eating device engineered for accessibility without compromising on form. This project extends the Pletho brand system into physical product design, developing a distinct visual identity across packaging, product photography, and marketing materials for the device itself.
+  - type: plate
+    src: assets/uploads/mtu6qmmb-artboard-1.jpg
+    alt: Logo design
+  - type: plate
+    src: assets/uploads/mtu6qr8b-instagram-branding.jpg
+    alt: Instagram branding
+  - type: plate
+    src: assets/uploads/mtu6qur9-2.jpg
+    alt: Packaging design
+  - type: plate
+    src: assets/uploads/mtu6r1d4-ad-design.jpg
+    alt: Digital advertizing design
 ---

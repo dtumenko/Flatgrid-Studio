@@ -6,13 +6,7 @@
    ============================================================= */
 
 .page-work{
-  /* The reset closes the body: height:100% with overflow:hidden. That
-     propagates to the viewport, and the only reason the desktop ever
-     scrolled is that Lenis moves it programmatically. Lenis is off on
-     touch, so a phone had nothing to translate a swipe into and the page
-     could not move at all. Every other page opens this; so does this one. */
-  height:auto;
-  overflow:visible;
+  overflow-x:hidden;
   background:var(--ink);
   /* the words start clear of the rail control, which keeps the left edge */
   /* breathing room between the end of a line and the frame */
@@ -36,7 +30,14 @@
 /* =============================================================
    CHROME
    ============================================================= */
-/* the wordmark and the rail are positioned once, in style.css */
+.page-work .logo{
+  position:fixed;z-index:70;
+  top:var(--pad);left:var(--pad);
+}
+.page-work .menu{
+  position:fixed;z-index:70;
+  left:calc(var(--pad) - 10px);top:calc(50% - 24px);
+}
 
 /* =============================================================
    THE SPLIT
@@ -235,8 +236,7 @@ body.has-cursor .reel__link{cursor:none}
 
 /* the way into a project on narrow screens, where the pinned stage — and
    with it the photograph that carries the link — is not drawn at all */
-.slide__go,
-.slide__shot{display:none}
+.slide__go{display:none}
 
 /* ---------- entrance ---------- */
 .js .slide__name,
@@ -294,18 +294,17 @@ body.has-cursor .reel__link{cursor:none}
   .slide{padding-left:var(--pad);padding-right:var(--pad)}
   .slide__foot{position:static;left:auto;right:auto;justify-content:flex-start;gap:20px}
   .slide__desc{max-width:62ch;font-size:13px}
-  /* the project's own photograph, above its words — and a way in, because
-     on a phone the pinned stage that carries the link is not drawn */
-  .slide__shot{
+  .slide::before{
+    /* the project's own photograph, set above its words */
+    content:"";
     display:block;
-    height:56svh;
-    margin:0 calc(var(--pad) * -1) clamp(22px,3.4vh,34px);
-    overflow:hidden;
-    background:var(--ink-2);
-  }
-  .slide__shot img{
-    width:100%;height:100%;
-    object-fit:cover;
+    height:56svh;margin:0 calc(var(--pad) * -1) clamp(22px,3.4vh,34px);
+    /* --img is set inline on the <li>, but Chrome resolves a url() inside a
+       custom property against the stylesheet that USES it, not the one that
+       declares it. Hence ../assets/ in work.html: from css/ it lands on
+       /assets/, and from the document a leading .. collapses to the same
+       place. Plain assets/ 404s here as /css/assets/. */
+    background:var(--img) center/cover no-repeat var(--ink-2);
     filter:brightness(.9) saturate(.94);
   }
   .slide:first-child{padding-top:calc(var(--pad) + 62px)}
@@ -317,9 +316,7 @@ body.has-cursor .reel__link{cursor:none}
        the full measure and the hit area runs far past the words */
     align-self:flex-start;
     display:inline-flex;align-items:center;gap:9px;
-    /* the only way into a project on a phone, so it is worth hitting */
-    padding:13px 0;
-    margin-top:clamp(8px,1.4vh,16px);
+    margin-top:clamp(18px,2.6vh,28px);
     font-family:var(--display);font-weight:400;
     font-size:15px;letter-spacing:-.012em;
     color:var(--accent);
@@ -327,7 +324,9 @@ body.has-cursor .reel__link{cursor:none}
 }
 
 @media (max-width:600px){
-  .slide__shot{height:48svh}
+  .page-work .logo__wordmark{height:26px}
+  .page-work .menu{top:auto;bottom:calc(var(--pad) + 8px)}
+  .slide::before{height:48svh}
   .slide__name{font-size:clamp(28px,8vw,42px)}
   .slide__tags{font-size:15px}
 }

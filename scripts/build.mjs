@@ -18,7 +18,7 @@ import matter from "gray-matter";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CONTENT_DIR = path.join(ROOT, "content/work");
-const SITE_URL = "https://flatgridstudio.com";
+const SITE_URL = "https://flatgrid.studio";
 
 /* --------------------------------------------------------------- helpers */
 
@@ -131,10 +131,6 @@ function buildProjectPage(project, next, template) {
     .replace(/\{\{DESCRIPTION\}\}/g, esc(project.meta_description || project.summary || ""))
     .replace(/\{\{COVER_ALT\}\}/g, esc(project.cover_alt || project.title))
     .replace(/\{\{COVER\}\}/g, esc(cover))
-    // Open Graph ignores relative paths: bez ovoga LinkedIn i Slack ne
-    // pokazuju sliku kad se link podeli.
-    .replace(/\{\{OG_IMAGE\}\}/g, esc(cover ? SITE_URL + "/" + cover : ""))
-    .replace(/\{\{OG_URL\}\}/g, esc(SITE_URL + "/project-" + project.slug + ".html"))
     .replace(/\{\{LINE\}\}/g, esc(project.line || ""))
     .replace(/\{\{LEAD\}\}/g, esc(project.lead || project.summary || ""))
     .replace(/\{\{DISCIPLINES\}\}/g, renderDisciplines(project.disciplines))
@@ -159,17 +155,11 @@ function renderSlides(projects) {
       const tags = list(p.disciplines)
         .map((t) => `          <li>${esc(t)}</li>`)
         .join("\n");
-      // Na telefonu je thumbnail i sam link na projekat, ne samo dugme ispod
-      // teksta. Pravi <img> u <a>, umesto background-image preko ::before:
-      // slika se tako moze kliknuti, a i putanja vise ne zavisi od toga
-      // odakle se custom property cita.
+      // --img se cita iz css/work.css, pa se putanja racuna od css/ foldera.
       const thumb = p.thumb || p.cover || "";
-      const shot = thumb
-        ? `        <a class="slide__shot" data-xfade="none" href="project-${esc(p.slug)}.html" aria-hidden="true" tabindex="-1"><img src="${esc(thumb)}" alt="" loading="lazy" decoding="async"></a>
-`
-        : "";
-      return `      <li class="slide" id="${esc(p.slug)}">
-${shot}        <h2 class="slide__name">${esc(p.title)}</h2>
+      const bg = thumb ? ` style="--img:url(../${esc(thumb)})"` : "";
+      return `      <li class="slide" id="${esc(p.slug)}"${bg}>
+        <h2 class="slide__name">${esc(p.title)}</h2>
         <ul class="slide__tags slide__tags--plain">
 ${tags}
         </ul>
