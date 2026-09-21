@@ -124,123 +124,16 @@
   });
 
   /* ---------------------------------------------------------
-     1. LOADER  —  the studio logo animation (MP4)
+     1. REVEAL GATE
+     The intro used to hold the hero back until the logo animation
+     had finished playing. There is no intro any more, so the page
+     is released the moment the script runs and builds straight away.
+
+     Set synchronously: requestAnimationFrame never fires while a tab
+     is in the background, so deferring to one would leave anyone who
+     opened the page in a background tab looking at an empty screen.
      --------------------------------------------------------- */
-  var loader   = doc.getElementById('loader');
-  var video    = doc.getElementById('loaderVideo');
-  var progress = doc.getElementById('loaderProgress');
-  var skipBtn  = doc.getElementById('loaderSkip');
-
-  /* The logo animation belongs to the arrival. It plays on the first page
-     of a visit and never again — coming back to the home page from the
-     wordmark, or from any other page, goes straight in. */
-  var ONCE_PER_SESSION = true;
-
-  var MAX_WAIT = 5800;   // never hold the page longer than this
-  var released = false;
-
-  /* Two independent ways of knowing the visitor is already here, because
-     neither is reliable on its own:
-
-       - they followed a link from another page of this site. This is the one
-         that matters for the wordmark, and it needs no storage at all;
-       - this browser has already been shown the intro this session.
-
-     sessionStorage throws or is isolated on file:// and in some private
-     modes, and some browsers strip the referrer — so either check alone can
-     miss, and the intro would play again on the way back to the home page. */
-  var seen = false;
-
-  try {
-    seen = !!doc.referrer &&
-           new URL(doc.referrer).host === window.location.host;
-  } catch (e) {}
-
-  try {
-    seen = seen || (ONCE_PER_SESSION && sessionStorage.getItem('fg:intro') === '1');
-    /* Marked here rather than in start(), so a visit that lands on the work
-       page first has still spent its intro by the time the wordmark is used. */
-    sessionStorage.setItem('fg:intro', '1');
-  } catch (e) {}
-
-  function release() {
-    if (released) return;
-    released = true;
-
-    loader.classList.add('is-done');
-    loader.setAttribute('aria-hidden', 'true');
-    if (video) { try { video.pause(); } catch (e) {} }
-
-    // Set this synchronously. requestAnimationFrame never fires while the
-    // tab is in the background, so deferring to it would leave anyone who
-    // opened the page in a background tab looking at an empty screen.
-    body.classList.add('is-live');
-
-    window.setTimeout(function () {
-      if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
-    }, 900);
-  }
-
-  function start() {
-    // progress hairline follows real playback
-    if (video) {
-      video.addEventListener('timeupdate', function () {
-        if (!video.duration) return;
-        progress.style.width = (video.currentTime / video.duration * 100) + '%';
-      });
-      video.addEventListener('ended', function () {
-        progress.style.width = '100%';
-        release();
-      });
-      // autoplay blocked, missing codec, or the file cannot be fetched
-      video.addEventListener('error', function () {
-        loader.classList.add('is-fallback');
-        window.setTimeout(release, 1400);
-      });
-
-      var playAttempt = video.play();
-      if (playAttempt && typeof playAttempt.catch === 'function') {
-        playAttempt.catch(function () {
-          loader.classList.add('is-fallback');
-          window.setTimeout(release, 1600);
-        });
-      }
-    } else {
-      window.setTimeout(release, 1200);
-    }
-
-    // hard ceiling
-    window.setTimeout(release, MAX_WAIT);
-
-    // let people out early
-    window.setTimeout(function () {
-      if (!released) skipBtn.classList.add('is-shown');
-    }, 1100);
-
-    skipBtn.addEventListener('click', release);
-    loader.addEventListener('click', release);
-    doc.addEventListener('keydown', function (e) {
-      if (!released && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) release();
-    });
-  }
-
-  if (!loader) {
-    // pages other than the home page carry no intro
-    body.classList.add('is-live');
-  } else if (arriving) {
-    // arrived through the menu: the curtain already covered the change
-    release();
-  } else if (reduce || seen) {
-    release();
-  } else if (doc.hidden) {
-    // opened in a background tab — don't play the intro to an empty room
-    doc.addEventListener('visibilitychange', function once() {
-      doc.removeEventListener('visibilitychange', once);
-      start();
-    });
-  } else {
-    start();
-  }
+  body.classList.add('is-live');
 
   /* ---------------------------------------------------------
      2. LOCAL CLOCK

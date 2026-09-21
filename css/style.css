@@ -7,7 +7,6 @@
 :root{
   /* brand */
   --ink:      #141415;
-  --ink-vid:  #141414;              /* the black the loader MP4 renders */
   --ink-2:    #0d0d0e;
   --paper:    #FBF8F3;
   --accent:   #FF7546;
@@ -96,54 +95,6 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   from{opacity:0;transform:scale(1.075)}
   to  {opacity:1;transform:scale(1)}
 }
-
-/* =============================================================
-   LOADER
-   ============================================================= */
-.loader{
-  position:fixed;inset:0;z-index:100;
-  display:grid;place-items:center;
-  background:var(--ink-vid);
-  isolation:isolate;                /* contain the blend below */
-  transition:opacity .7s var(--ease), visibility .7s;
-}
-.loader.is-done{opacity:0;visibility:hidden;pointer-events:none}
-.loader__video{
-  width:min(50%,940px);height:auto;
-  max-height:56%;
-  object-fit:contain;
-  background:transparent;
-  /* the video's ground is never lighter than the plate, so it vanishes;
-     every glyph pixel is lighter, so the mark passes through untouched */
-  mix-blend-mode:lighten;
-}
-.loader__fallback{
-  position:absolute;
-  width:min(34vw,240px);height:auto;
-  opacity:0;
-  transition:opacity .6s var(--ease);
-}
-.loader.is-fallback .loader__video{display:none}
-.loader.is-fallback .loader__fallback{opacity:1;animation:pulse 2s var(--ease-io) infinite}
-@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
-
-.loader__bar{
-  position:absolute;left:var(--pad);right:var(--pad);bottom:var(--pad);
-  height:1px;background:var(--line);overflow:hidden;
-}
-.loader__bar i{
-  display:block;height:100%;width:0;
-  background:var(--accent);
-  transition:width .35s linear;
-}
-.loader__skip{
-  position:absolute;right:var(--pad);bottom:calc(var(--pad) + 18px);
-  font-size:10px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--muted);
-  opacity:0;transition:opacity .5s var(--ease),color .25s;
-}
-.loader__skip.is-shown{opacity:1}
-.loader__skip:hover{color:var(--accent)}
 
 /* =============================================================
    HERO SHELL
@@ -717,7 +668,6 @@ body.nav-open .social a:hover{color:var(--accent)}
   .status__item--mid{display:none}
 
   /* the mark needs more of a narrow screen to stay legible */
-  .loader__video{width:72%;max-height:50%}
 }
 
 /* ── phone ── */
@@ -755,7 +705,6 @@ body.nav-open .social a:hover{color:var(--accent)}
   .rule--foot{bottom:calc(var(--pad) + 28px)}
   .status{font-size:9.5px;letter-spacing:.1em}
   /* full width of the column on a phone — the easiest possible tap target */
-  .loader__video{width:88%;max-height:44%}
 }
 
 /* six nav items need headroom on a short screen */
@@ -789,9 +738,7 @@ body.nav-open .social a:hover{color:var(--accent)}
     opacity:1;transform:none;clip-path:none;
   }
   .stage__grain,.dot,.services__rule i{animation:none}
-  .loader{display:none}
   *,*::before,*::after{transition-duration:.01ms!important}
 }
 
 /* no-JS: show everything */
-html.no-js .loader{display:none}
