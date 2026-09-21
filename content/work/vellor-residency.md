@@ -27,4 +27,7 @@ blocks:
   - type: plate
     src: assets/uploads/mubgya4m-cards.jpg
     alt: ''
+  - type: plate
+    src: assets/uploads/mubh0tjw-motion-ad.gif
+    alt: ''
 ---
