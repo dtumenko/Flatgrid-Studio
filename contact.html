@@ -47,21 +47,19 @@
   <span class="cols" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
 
   <header class="sheet__head">
-    <p class="sheet__eyebrow up">Contact</p>
-    <h1 class="sheet__title mask up"><span>Start a project</span></h1>
-    <p class="sheet__lead up d1">Tell us what you are making and where it is going.
-      A sentence about the problem is worth more than a full brief — we will come
-      back with questions either way.</p>
+    <p class="sheet__eyebrow up" data-cms="contact.eyebrow">Contact</p>
+    <h1 class="sheet__title mask up"><span data-cms="contact.title">Start a project</span></h1>
+    <p class="sheet__lead up d1" data-cms="contact.lead">Tell us what you are making and where it is going. A sentence about the problem is worth more than a full brief — we will come back with questions either way.</p>
   </header>
 
   <div class="contact">
     <div class="contact__aside">
       <dl class="detail up">
-        <dt>Email</dt>
+        <dt data-cms="contact.email_label">Email</dt>
         <dd><a href="mailto:flatgrid.studio@gmail.com">flatgrid.studio@gmail.com</a></dd>
       </dl>
       <dl class="detail detail--links up d1">
-        <dt>Elsewhere</dt>
+        <dt data-cms="contact.links_label">Elsewhere</dt>
         <dd>
           <a href="https://www.behance.net/flatgrid" target="_blank" rel="noopener noreferrer">Behance</a>
           <a href="https://www.linkedin.com/company/flatgrid-studio" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -69,8 +67,8 @@
         </dd>
       </dl>
       <dl class="detail up d2">
-        <dt>Reply</dt>
-        <dd>Within two working days.</dd>
+        <dt data-cms="contact.reply_label">Reply</dt>
+        <dd data-cms="contact.reply_value">Within two working days.</dd>
       </dl>
     </div>
 
@@ -81,25 +79,25 @@
           action="https://formspree.io/f/YOUR_FORM_ID">
 
       <div class="field up">
-        <label for="f-name">Name</label>
+        <label for="f-name" data-cms="contact.form_name">Name</label>
         <input id="f-name" name="name" type="text" placeholder="Your name"
                autocomplete="name" required>
       </div>
 
       <div class="field up">
-        <label for="f-email">Email</label>
+        <label for="f-email" data-cms="contact.form_email">Email</label>
         <input id="f-email" name="email" type="email" placeholder="you@company.com"
                autocomplete="email" required>
       </div>
 
       <div class="field up">
-        <label for="f-company">Company <em>&mdash; optional</em></label>
+        <label for="f-company" data-cms="contact.form_company">Company <em>— optional</em></label>
         <input id="f-company" name="company" type="text" placeholder="Where you work"
                autocomplete="organization">
       </div>
 
       <div class="field up">
-        <label for="f-project">What it is</label>
+        <label for="f-project" data-cms="contact.form_project">What it is</label>
         <select id="f-project" name="project" required>
           <option value="Brand identity design">Brand identity design</option>
           <option value="UI/UX design">UI/UX design</option>
@@ -111,12 +109,12 @@
       </div>
 
       <div class="field up">
-        <label for="f-message">The project</label>
+        <label for="f-message" data-cms="contact.form_message">The project</label>
         <textarea id="f-message" name="message" rows="5" required
                   placeholder="What you are making, who it is for, and when you need it."></textarea>
       </div>
 
-      <button class="form__send" type="submit">Send it<svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" focusable="false"><path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button>
+      <button class="form__send" type="submit"><span data-cms="contact.form_send">Send it</span><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" focusable="false"><path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button>
       <p class="form__note" id="formNote" role="status" hidden></p>
     </form>
   </div>

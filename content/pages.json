@@ -1,0 +1,219 @@
+{
+  "_comment": [
+    "Sta panel (/admin, kolekcija 'Stranice') sme da menja na rucno pisanim stranicama.",
+    "Ovde stoji SAMO spisak polja — vrednosti nikad. Tekst zivi u samom HTML-u, a panel",
+    "ga nalazi po atributu data-cms i upisuje nazad na isto mesto. Zato nema razilazenja:",
+    "stranicu mozes i dalje da editujes rukom, panel ce sledeci put pokazati to sto si upisao.",
+    "",
+    "Svako polje ima id koji mora da postoji u fajlu kao data-cms=\"<id>\".",
+    "kind: text  — obican tekst (& < > se escape-uju pri upisu)",
+    "      html  — zadrzava inline markup, npr. <em> ili <br>",
+    "      image — menja src atribut elementa",
+    "      bg    — menja url(...) u --hero promenljivoj u style atributu",
+    "",
+    "Dodajes novo polje: upisi data-cms=\"stranica.kljuc\" u HTML, pa dodaj red ovde.",
+    "Provera da su sidra i spisak u skladu: npm run check-pages"
+  ],
+
+  "home": {
+    "label": "Home",
+    "file": "index.html",
+    "url": "/",
+    "groups": [
+      {
+        "label": "Hero",
+        "fields": [
+          { "id": "home.hero", "label": "Pozadinska fotografija", "kind": "bg" },
+          { "id": "home.note_a", "label": "Napomena — levo", "kind": "html", "rows": 2 },
+          { "id": "home.note_b", "label": "Napomena — desno", "kind": "html", "rows": 2 },
+          { "id": "home.cta_title", "label": "Dugme gore desno", "kind": "text" }
+        ]
+      },
+      {
+        "label": "Izjava",
+        "fields": [
+          { "id": "home.eyebrow", "label": "Nadnaslov", "kind": "text" },
+          { "id": "home.headline_1", "label": "Naslov — prvi red", "kind": "text" },
+          { "id": "home.headline_2", "label": "Naslov — drugi red", "kind": "text" },
+          { "id": "home.headline_3", "label": "Naslov — treci red", "kind": "html" }
+        ]
+      },
+      {
+        "label": "Usluge",
+        "fields": [
+          { "id": "home.service_1", "label": "Usluga 01", "kind": "text" },
+          { "id": "home.service_2", "label": "Usluga 02", "kind": "text" },
+          { "id": "home.service_3", "label": "Usluga 03", "kind": "text" },
+          { "id": "home.service_4", "label": "Usluga 04", "kind": "text" },
+          { "id": "home.service_5", "label": "Usluga 05", "kind": "text" }
+        ]
+      },
+      {
+        "label": "Traka na dnu",
+        "fields": [
+          { "id": "home.status_available", "label": "Status", "kind": "text" },
+          { "id": "home.status_mid", "label": "Potpis", "kind": "html" }
+        ]
+      }
+    ]
+  },
+
+  "studio": {
+    "label": "Studio",
+    "file": "studio.html",
+    "url": "/studio.html",
+    "groups": [
+      {
+        "label": "Vrh stranice",
+        "fields": [
+          { "id": "studio.note_a", "label": "Napomena — prva", "kind": "html", "rows": 2 },
+          { "id": "studio.note_b", "label": "Napomena — druga", "kind": "html", "rows": 2 },
+          { "id": "studio.photo", "label": "Fotografija studija", "kind": "image" },
+          { "id": "studio.figcaption", "label": "Potpis ispod fotografije", "kind": "text" },
+          { "id": "studio.cta1_label", "label": "Prva linija — oznaka", "kind": "text" },
+          { "id": "studio.cta1_go", "label": "Prva linija — tekst linka", "kind": "text" },
+          { "id": "studio.cta2_label", "label": "Druga linija — oznaka", "kind": "text" },
+          { "id": "studio.cta2_go", "label": "Druga linija — tekst linka", "kind": "text" }
+        ]
+      },
+      {
+        "label": "Cetiri principa",
+        "fields": [
+          { "id": "studio.read1_label", "label": "Princip 1 — naslov", "kind": "text" },
+          { "id": "studio.read1_text", "label": "Princip 1 — tekst", "kind": "text", "rows": 5 },
+          { "id": "studio.read2_label", "label": "Princip 2 — naslov", "kind": "text" },
+          { "id": "studio.read2_text", "label": "Princip 2 — tekst", "kind": "text", "rows": 5 },
+          { "id": "studio.read3_label", "label": "Princip 3 — naslov", "kind": "text" },
+          { "id": "studio.read3_text", "label": "Princip 3 — tekst", "kind": "text", "rows": 5 },
+          { "id": "studio.read4_label", "label": "Princip 4 — naslov", "kind": "text" },
+          { "id": "studio.read4_text", "label": "Princip 4 — tekst", "kind": "text", "rows": 5 }
+        ]
+      },
+      {
+        "label": "Fakta",
+        "fields": [
+          { "id": "studio.fact1_key", "label": "Fakat 1 — naziv", "kind": "text" },
+          { "id": "studio.fact1_value", "label": "Fakat 1 — vrednost", "kind": "text" },
+          { "id": "studio.fact2_key", "label": "Fakat 2 — naziv", "kind": "text" },
+          { "id": "studio.fact2_value", "label": "Fakat 2 — vrednost", "kind": "text" },
+          { "id": "studio.fact3_key", "label": "Fakat 3 — naziv", "kind": "text" },
+          { "id": "studio.fact3_value", "label": "Fakat 3 — vrednost", "kind": "text" }
+        ]
+      },
+      {
+        "label": "Proces",
+        "fields": [
+          { "id": "studio.steps_head", "label": "Naslov sekcije", "kind": "text" },
+          { "id": "studio.step1_name", "label": "Korak 01 — naziv", "kind": "text" },
+          { "id": "studio.step1_text", "label": "Korak 01 — tekst", "kind": "text", "rows": 4 },
+          { "id": "studio.step2_name", "label": "Korak 02 — naziv", "kind": "text" },
+          { "id": "studio.step2_text", "label": "Korak 02 — tekst", "kind": "text", "rows": 4 },
+          { "id": "studio.step3_name", "label": "Korak 03 — naziv", "kind": "text" },
+          { "id": "studio.step3_text", "label": "Korak 03 — tekst", "kind": "text", "rows": 4 },
+          { "id": "studio.step4_name", "label": "Korak 04 — naziv", "kind": "text" },
+          { "id": "studio.step4_text", "label": "Korak 04 — tekst", "kind": "text", "rows": 4 }
+        ]
+      },
+      {
+        "label": "Discipline",
+        "fields": [
+          { "id": "studio.svcs_head", "label": "Naslov sekcije", "kind": "text" },
+          { "id": "studio.svc1_name_a", "label": "Disciplina 01 — prvi red", "kind": "text" },
+          { "id": "studio.svc1_name_b", "label": "Disciplina 01 — drugi red", "kind": "text" },
+          { "id": "studio.svc1_text", "label": "Disciplina 01 — tekst", "kind": "text", "rows": 4 },
+          { "id": "studio.svc2_name_a", "label": "Disciplina 02 — prvi red", "kind": "text" },
+          { "id": "studio.svc2_name_b", "label": "Disciplina 02 — drugi red", "kind": "text" },
+          { "id": "studio.svc2_text", "label": "Disciplina 02 — tekst", "kind": "text", "rows": 4 },
+          { "id": "studio.svc3_name_a", "label": "Disciplina 03 — prvi red", "kind": "text" },
+          { "id": "studio.svc3_name_b", "label": "Disciplina 03 — drugi red", "kind": "text" },
+          { "id": "studio.svc3_text", "label": "Disciplina 03 — tekst", "kind": "text", "rows": 4 },
+          { "id": "studio.svc4_name_a", "label": "Disciplina 04 — prvi red", "kind": "text" },
+          { "id": "studio.svc4_name_b", "label": "Disciplina 04 — drugi red", "kind": "text" },
+          { "id": "studio.svc4_text", "label": "Disciplina 04 — tekst", "kind": "text", "rows": 4 }
+        ]
+      },
+      {
+        "label": "Traka na dnu",
+        "fields": [
+          { "id": "studio.band_label", "label": "Oznaka", "kind": "text" },
+          { "id": "studio.band_link", "label": "Tekst linka", "kind": "text" }
+        ]
+      }
+    ]
+  },
+
+  "director": {
+    "label": "Director",
+    "file": "director.html",
+    "url": "/director.html",
+    "groups": [
+      {
+        "label": "Vrh stranice",
+        "fields": [
+          { "id": "director.photo", "label": "Portret", "kind": "image" },
+          { "id": "director.role", "label": "Uloga", "kind": "text" },
+          { "id": "director.location", "label": "Lokacija", "kind": "html", "rows": 2 },
+          { "id": "director.fact1_key", "label": "Fakat 1 — naziv", "kind": "text" },
+          { "id": "director.fact1_value", "label": "Fakat 1 — vrednost", "kind": "text" },
+          { "id": "director.fact2_key", "label": "Fakat 2 — naziv", "kind": "text" },
+          { "id": "director.fact2_value", "label": "Fakat 2 — vrednost", "kind": "text" }
+        ]
+      },
+      {
+        "label": "Tekst",
+        "fields": [
+          { "id": "director.bio_label", "label": "Bio — naslov", "kind": "text" },
+          { "id": "director.bio_p1", "label": "Bio — prvi pasus", "kind": "text", "rows": 5 },
+          { "id": "director.bio_p2", "label": "Bio — drugi pasus", "kind": "text", "rows": 4 },
+          { "id": "director.notable_label", "label": "Izabrani radovi — naslov", "kind": "text" },
+          { "id": "director.notable_p1", "label": "Izabrani radovi — prvi pasus", "kind": "text", "rows": 5 },
+          { "id": "director.notable_p2", "label": "Izabrani radovi — drugi pasus", "kind": "text", "rows": 3 },
+          { "id": "director.elsewhere_label", "label": "Linkovi — naslov", "kind": "text" }
+        ]
+      },
+      {
+        "label": "Traka na dnu",
+        "fields": [
+          { "id": "director.band_label", "label": "Oznaka", "kind": "text" },
+          { "id": "director.band_link", "label": "Tekst linka", "kind": "text" }
+        ]
+      }
+    ]
+  },
+
+  "contact": {
+    "label": "Contact",
+    "file": "contact.html",
+    "url": "/contact.html",
+    "groups": [
+      {
+        "label": "Zaglavlje",
+        "fields": [
+          { "id": "contact.eyebrow", "label": "Nadnaslov", "kind": "text" },
+          { "id": "contact.title", "label": "Naslov", "kind": "text" },
+          { "id": "contact.lead", "label": "Uvodni tekst", "kind": "text", "rows": 4 }
+        ]
+      },
+      {
+        "label": "Podaci sa strane",
+        "fields": [
+          { "id": "contact.email_label", "label": "Mejl — oznaka", "kind": "text" },
+          { "id": "contact.links_label", "label": "Linkovi — oznaka", "kind": "text" },
+          { "id": "contact.reply_label", "label": "Odgovor — oznaka", "kind": "text" },
+          { "id": "contact.reply_value", "label": "Odgovor — tekst", "kind": "text" }
+        ]
+      },
+      {
+        "label": "Formular",
+        "fields": [
+          { "id": "contact.form_name", "label": "Polje — ime", "kind": "text" },
+          { "id": "contact.form_email", "label": "Polje — mejl", "kind": "text" },
+          { "id": "contact.form_company", "label": "Polje — firma", "kind": "html" },
+          { "id": "contact.form_project", "label": "Polje — vrsta posla", "kind": "text" },
+          { "id": "contact.form_message", "label": "Polje — poruka", "kind": "text" },
+          { "id": "contact.form_send", "label": "Dugme", "kind": "text" }
+        ]
+      }
+    ]
+  }
+}

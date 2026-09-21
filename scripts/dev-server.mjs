@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-// Lokalni server za rad na sajtu — servira folder i daje /admin panelu dva
-// endpointa da cita i pise content/work/*.md pravo na disk. Bez ovoga bi
-// panel morao na GitHub, sto za rad na svom racunaru nema smisla.
+// Lokalni server za rad na sajtu — servira folder i daje /admin panelu
+// endpointe da cita i pise content/work/*.md i rucno pisane stranice pravo na
+// disk. Bez ovoga bi panel morao na GitHub, sto za rad na racunaru nema smisla.
 //
 // Pokretanje: npm run dev        (ili: node scripts/dev-server.mjs 5178)
 // Sajt:       http://localhost:5178
 // Panel:      http://localhost:5178/admin/
 //
-// Server slusa samo na 127.0.0.1 i pise iskljucivo u content/work i
-// assets/uploads — namerno, da greska u panelu ne moze da pregazi nista
-// drugo u projektu.
+// Server slusa samo na 127.0.0.1 i pise iskljucivo u content/work,
+// assets/uploads i u one stranice koje kolekcija Stranice pokriva — namerno,
+// da greska u panelu ne moze da pregazi nista drugo u projektu.
 
 import http from "node:http";
 import fs from "node:fs";
@@ -22,6 +22,9 @@ const PORT = Number(process.argv[2]) || 5178;
 
 const CONTENT_DIR = path.join(ROOT, "content/work");
 const WRITABLE = ["content/work", "assets/uploads"];
+// Kolekcija Stranice menja ove fajlove u mestu. Spisak je ovde zakovan, a ne
+// citan iz content/pages.json, da izmena tog fajla ne moze da prosiri prava.
+const WRITABLE_FILES = ["index.html", "studio.html", "director.html", "contact.html"];
 
 const MIME = {
   ".html": "text/html", ".css": "text/css", ".js": "text/javascript",
@@ -63,7 +66,19 @@ function readBody(req) {
 // "../" u imenu fajla inace izlazi bilo gde po disku.
 function safeTarget(relative) {
   const clean = String(relative || "").replace(/^\/+/, "");
-  if (!WRITABLE.some((dir) => clean.startsWith(dir + "/"))) return null;
+  const allowed =
+    WRITABLE.some((dir) => clean.startsWith(dir + "/")) || WRITABLE_FILES.includes(clean);
+  if (!allowed) return null;
+  const full = path.resolve(ROOT, clean);
+  if (!full.startsWith(ROOT + path.sep)) return null;
+  return full;
+}
+
+// Citanje je sire od pisanja: panelu treba content/pages.json i same stranice.
+// Svejedno se putanja razresava i proverava da ne izadje iz projekta.
+function safeSource(relative) {
+  const clean = String(relative || "").replace(/^\/+/, "");
+  if (!clean) return null;
   const full = path.resolve(ROOT, clean);
   if (!full.startsWith(ROOT + path.sep)) return null;
   return full;
@@ -124,6 +139,17 @@ const server = http.createServer((req, res) => {
 
   if (pathname === "/api/local/list") {
     return json(res, 200, listContent());
+  }
+
+  if (pathname === "/api/local/file") {
+    const target = safeSource(new URLSearchParams(parsed.query || "").get("path"));
+    if (!target) return json(res, 400, { ok: false, error: "Putanja nije dozvoljena." });
+    if (!fs.existsSync(target)) {
+      res.writeHead(404, { "Cache-Control": "no-store" });
+      return res.end("Not found");
+    }
+    res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" });
+    return res.end(fs.readFileSync(target, "utf8"));
   }
 
   if (pathname === "/api/local/commit" && req.method === "POST") {

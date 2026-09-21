@@ -50,7 +50,7 @@
 
   <!-- stage: photograph, grain, vignette -->
   <div class="stage" aria-hidden="true">
-    <div class="stage__img reveal" style="--delay:1.55s"></div>
+    <div class="stage__img reveal" style="--delay:1.55s;--hero:url(/assets/hero-bg.jpg)" data-cms="home.hero"></div>
     <div class="stage__sheen"></div>
     <div class="stage__vignette"></div>
     <div class="stage__grain"></div>
@@ -79,19 +79,15 @@
 
   <!-- ── masthead ── -->
   <header class="masthead">
-    <p class="note note--a reveal" style="--delay:.74s">
-      A good design is created<br>by <em>definition</em>.
-    </p>
-    <p class="note note--b reveal" style="--delay:.82s">
-      A good design is knowing<br>which mistakes you can <em>keep</em>.
-    </p>
+    <p class="note note--a reveal" style="--delay:.74s" data-cms="home.note_a">A good design is created<br>by <em>definition</em>.</p>
+    <p class="note note--b reveal" style="--delay:.82s" data-cms="home.note_b">A good design is knowing<br>which mistakes you can <em>keep</em>.</p>
   </header>
 
   <!-- ── call to action: fills the top-right cell of the grid ──
        Interim destination is email. Replace href with the Google Calendar
        booking link (https://calendar.app.google/…) once it exists — see README. -->
   <a class="cta" href="mailto:flatgrid.studio@gmail.com?subject=Project%20enquiry" id="cta">
-    <span class="cta__title">Book a call</span>
+    <span class="cta__title" data-cms="home.cta_title">Book a call</span>
     <svg class="cta__arrow" viewBox="0 0 20 20" width="19" height="19" aria-hidden="true" focusable="false">
       <path d="M5 15 15 5M6.5 5H15v8.5" fill="none" stroke="currentColor"
             stroke-width="1.7" stroke-linecap="square"/>
@@ -100,14 +96,12 @@
 
   <!-- ── statement ── -->
   <div class="statement">
-    <p class="eyebrow reveal" style="--delay:1.12s">
-      <span class="eyebrow__idx">01</span> Design &amp; Branding Studio
-    </p>
+    <p class="eyebrow reveal" style="--delay:1.12s"><span class="eyebrow__idx">01</span> <span data-cms="home.eyebrow">Design &amp; Branding Studio</span></p>
 
     <h1 class="headline" id="headline">
-      <span class="headline__line"><span>We use power of design</span></span>
-      <span class="headline__line"><span>to help diverse clients grow</span></span>
-      <span class="headline__line"><span>their <em>business.</em></span></span>
+      <span class="headline__line"><span data-cms="home.headline_1">We use power of design</span></span>
+      <span class="headline__line"><span data-cms="home.headline_2">to help diverse clients grow</span></span>
+      <span class="headline__line"><span data-cms="home.headline_3">their <em>business.</em></span></span>
     </h1>
 
     <div class="services reveal" style="--delay:1.90s">
@@ -115,11 +109,11 @@
         <i></i><i></i><i></i><i></i><i></i>
       </div>
       <ul class="services__list">
-        <li>Branding</li>
-        <li>Visual Identity</li>
-        <li>Web Design</li>
-        <li>Art Direction</li>
-        <li>Editorial Design</li>
+        <li data-cms="home.service_1">Branding</li>
+        <li data-cms="home.service_2">Visual Identity</li>
+        <li data-cms="home.service_3">Web Design</li>
+        <li data-cms="home.service_4">Art Direction</li>
+        <li data-cms="home.service_5">Editorial Design</li>
       </ul>
     </div>
 
@@ -127,12 +121,8 @@
 
   <!-- ── status bar ── -->
   <footer class="status">
-    <p class="status__item reveal" style="--delay:2.05s">
-      <span class="dot" aria-hidden="true"></span> Available for new projects
-    </p>
-    <p class="status__item status__item--mid reveal" style="--delay:2.12s">
-      Flatgrid Studio<sup>&reg;</sup>
-    </p>
+    <p class="status__item reveal" style="--delay:2.05s"><span class="dot" aria-hidden="true"></span> <span data-cms="home.status_available">Available for new projects</span></p>
+    <p class="status__item status__item--mid reveal" style="--delay:2.12s" data-cms="home.status_mid">Flatgrid Studio<sup>&reg;</sup></p>
     <p class="status__item status__item--end reveal" style="--delay:2.19s">
       Local <time id="clock">--:--:--</time>
     </p>

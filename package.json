@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "check-pages": "node scripts/check-pages.mjs",
     "dev": "node scripts/dev-server.mjs"
   },
   "dependencies": {

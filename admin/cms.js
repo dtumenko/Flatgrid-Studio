@@ -83,6 +83,7 @@
     globe: svg('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.7 5.7 3.7 9S14.5 18.3 12 21c-2.5-2.7-3.7-5.7-3.7-9S9.5 5.7 12 3Z"/>'),
     play: svg('<path d="M8 5.5v13l10-6.5-10-6.5Z"/>'),
     logout: svg('<path d="M9 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h3M16 16l4-4-4-4M20 12H10"/>'),
+    page: svg('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/>'),
   };
 
   var LOGO = '<img class="logo" src="/assets/logo-mark.png" alt="Flatgrid Studio">';
@@ -176,6 +177,16 @@
             "http://localhost:5178/admin/, ne dvoklikom na fajl."
         );
       });
+  };
+
+  LocalStore.prototype.readFile = function (file) {
+    return fetch("/api/local/file?path=" + encodeURIComponent(file), { cache: "no-store" }).then(
+      function (res) {
+        if (res.status === 404) return null;
+        if (!res.ok) throw new Error("Ne mogu da procitam " + file + " (" + res.status + ").");
+        return res.text();
+      }
+    );
   };
 
   LocalStore.prototype.commit = function (message, files) {
@@ -317,6 +328,175 @@
     );
   };
 
+  /* ------------------------------------------------------------- slotovi */
+
+  /* Stranice koje nisu generisane (index, studio, director, contact) menjaju se
+   * na licu mesta. Mesto izmene nosi sam HTML: element sa data-cms="<id>".
+   * Sadrzaj se ne duplira nigde — content/pages.json kaze samo KOJA polja
+   * postoje, a vrednost se uvek cita iz stranice. Zato panel i rucna izmena
+   * fajla ne mogu da se raziju.
+   */
+
+  var VOID_TAGS = { img: 1, br: 1, hr: 1, input: 1, meta: 1, link: 1, source: 1 };
+
+  // Nadji element koji nosi trazeno sidro i njegove granice. Zatvarajuci tag se
+  // trazi brojanjem dubine, da ugnjezdeni <span> u <span> ne prekine prerano.
+  function locateSlot(html, id) {
+    var at = html.indexOf('data-cms="' + id + '"');
+    if (at < 0) return null;
+
+    var openStart = html.lastIndexOf("<", at);
+    if (openStart < 0) return null;
+    var name = /^<([a-zA-Z][\w-]*)/.exec(html.slice(openStart, at));
+    if (!name) return null;
+    var tag = name[1].toLowerCase();
+
+    var openEnd = html.indexOf(">", at);
+    if (openEnd < 0) return null;
+    openEnd += 1;
+
+    if (VOID_TAGS[tag] || html.charAt(openEnd - 2) === "/") {
+      return { tag: tag, openStart: openStart, openEnd: openEnd, innerStart: -1, innerEnd: -1 };
+    }
+
+    var re = new RegExp("<(/?)" + tag + "(?=[\\s/>])", "gi");
+    re.lastIndex = openEnd;
+    var depth = 1;
+    var match;
+    while ((match = re.exec(html))) {
+      depth += match[1] ? -1 : 1;
+      if (depth === 0) {
+        return {
+          tag: tag,
+          openStart: openStart,
+          openEnd: openEnd,
+          innerStart: openEnd,
+          innerEnd: match.index,
+        };
+      }
+    }
+    return null;
+  }
+
+  // Tekst se korisniku pokazuje kao tekst, a ne kao &mdash; i &amp;. Citanje ide
+  // kroz browser da bi se svaka entitet-oznaka razresila; upis vraca nazad samo
+  // ona tri znaka koja u HTML-u zaista moraju da budu escape-ovana.
+  function decodeHtml(text) {
+    var area = document.createElement("textarea");
+    area.innerHTML = String(text);
+    return area.value;
+  }
+
+  function escapeText(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function readSlot(html, field) {
+    var slot = locateSlot(html, field.id);
+    if (!slot) return null;
+
+    if (field.kind === "image" || field.kind === "bg") {
+      var open = html.slice(slot.openStart, slot.openEnd);
+      var found =
+        field.kind === "image"
+          ? /\ssrc="([^"]*)"/.exec(open)
+          : /--hero:\s*url\(([^)]*)\)/.exec(open);
+      if (!found) return null;
+      return found[1].replace(/^["']|["']$/g, "").replace(/^\//, "");
+    }
+
+    var inner = html.slice(slot.innerStart, slot.innerEnd);
+    return field.kind === "html" ? inner.trim() : decodeHtml(inner).trim();
+  }
+
+  function writeSlot(html, field, value) {
+    var slot = locateSlot(html, field.id);
+    if (!slot) {
+      throw new Error('Sidro data-cms="' + field.id + '" vise ne postoji u stranici.');
+    }
+
+    if (field.kind === "image" || field.kind === "bg") {
+      var open = html.slice(slot.openStart, slot.openEnd);
+      var pattern = field.kind === "image" ? /\ssrc="[^"]*"/ : /--hero:\s*url\([^)]*\)/;
+      if (!pattern.test(open)) {
+        throw new Error("Polje „" + field.label + "“ nema gde da upise putanju do slike.");
+      }
+      var replacement =
+        field.kind === "image"
+          ? ' src="' + value + '"'
+          : "--hero:url(/" + String(value).replace(/^\//, "") + ")";
+      return html.slice(0, slot.openStart) + open.replace(pattern, replacement) + html.slice(slot.openEnd);
+    }
+
+    var body = field.kind === "html" ? String(value) : escapeText(value);
+    return html.slice(0, slot.innerStart) + body + html.slice(slot.innerEnd);
+  }
+
+  function flatFields(page) {
+    var out = [];
+    (page.groups || []).forEach(function (group) {
+      (group.fields || []).forEach(function (field) {
+        out.push(field);
+      });
+    });
+    return out;
+  }
+
+  // Sema + trenutne vrednosti iz samih stranica.
+  function loadPages(store) {
+    var schemaFile = CFG.pagesFile || "content/pages.json";
+    return store.readFile(schemaFile).then(function (text) {
+      if (!text) throw new Error("Nema " + schemaFile + " — kolekcija Stranice ne moze da se ucita.");
+      var schema = JSON.parse(text);
+      var ids = Object.keys(schema).filter(function (id) {
+        return id.charAt(0) !== "_";
+      });
+      var sources = {};
+
+      return Promise.all(
+        ids.map(function (id) {
+          return store.readFile(schema[id].file);
+        })
+      ).then(function (files) {
+        var pages = ids.map(function (id, index) {
+          var entry = schema[id];
+          var html = files[index];
+          if (html === null) throw new Error("Ne mogu da procitam " + entry.file + ".");
+          sources[entry.file] = html;
+
+          return {
+            key: "page:" + id,
+            kind: "page",
+            id: id,
+            title: entry.label || id,
+            file: entry.file,
+            url: entry.url || "/",
+            groups: (entry.groups || []).map(function (group) {
+              return {
+                label: group.label || "",
+                fields: (group.fields || []).map(function (field) {
+                  var value = readSlot(html, field);
+                  return {
+                    id: field.id,
+                    label: field.label || field.id,
+                    kind: field.kind || "text",
+                    rows: Number(field.rows) || 0,
+                    missing: value === null,
+                    value: value === null ? "" : value,
+                  };
+                }),
+              };
+            }),
+          };
+        });
+        return { pages: pages, sources: sources };
+      });
+    });
+  }
+
   /* --------------------------------------------------------- item mapping */
 
   var uid = 0;
@@ -445,6 +625,11 @@
     store: null,
     user: null,
     items: [],
+    // Dve kolekcije: "work" (projekti, .md fajlovi) i "pages" (rucno pisane
+    // stranice, menjaju se u mestu preko data-cms sidara).
+    collection: "work",
+    pages: [],
+    pageSources: {},
     view: "list",
     selectedKey: null,
     draft: null,
@@ -550,7 +735,18 @@
         state.items = items.sort(function (a, b) {
           return (a.order || 999) - (b.order || 999);
         });
+        // Greska u content/pages.json ne sme da obori ceo panel — projekti
+        // rade i bez kolekcije Stranice, pa se javlja samo poruka.
+        return loadPages(state.store).catch(function (err) {
+          console.error(err);
+          return { pages: [], sources: {}, error: err.message };
+        });
+      })
+      .then(function (loaded) {
+        state.pages = loaded.pages;
+        state.pageSources = loaded.sources;
         render();
+        if (loaded.error) toast("Stranice se ne mogu ucitati: " + loaded.error, true);
       })
       .catch(function (err) {
         console.error(err);
@@ -574,6 +770,16 @@
 
   function visibleItems() {
     var query = state.query.trim().toLowerCase();
+
+    if (state.collection === "pages") {
+      return state.pages.filter(function (page) {
+        if (!query) return true;
+        return (
+          page.title.toLowerCase().indexOf(query) >= 0 || page.url.toLowerCase().indexOf(query) >= 0
+        );
+      });
+    }
+
     var rows = state.items.filter(function (item) {
       if (state.statusFilter !== "all" && item.status !== state.statusFilter) return false;
       if (!query) return true;
@@ -596,10 +802,25 @@
   }
 
   function findItem(key) {
-    for (var i = 0; i < state.items.length; i++) {
-      if (state.items[i].key === key) return state.items[i];
+    var all = state.items.concat(state.pages);
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].key === key) return all[i];
     }
     return null;
+  }
+
+  function switchCollection(name) {
+    if (state.collection === name) return;
+    if (state.dirty && !confirm("Imas nesacuvane izmene. Napustiti ih?")) return;
+    dropUnsavedNew(null);
+    state.collection = name;
+    state.view = "list";
+    state.draft = null;
+    state.original = null;
+    state.selectedKey = null;
+    state.dirty = false;
+    state.query = "";
+    render();
   }
 
   // Sta panel prikazuje kao pregled slike. Fajl koji ceka objavu ima svoj data
@@ -612,6 +833,13 @@
     if (!src) return "";
     if (IS_LOCAL) return "/" + src.replace(/^\//, "");
     return "https://raw.githubusercontent.com/" + CFG.repo + "/" + CFG.branch + "/" + src.replace(/^\//, "");
+  }
+
+  // "View site" vodi na stranicu koju kolekcija pokriva, ne uvek na /work.html.
+  function viewSiteHref() {
+    var page = state.collection === "pages" && state.selectedKey ? findItem(state.selectedKey) : null;
+    var path = page ? page.url : state.collection === "pages" ? "/" : "/work.html";
+    return IS_LOCAL ? path : CFG.siteUrl.replace(/\/$/, "") + path;
   }
 
   function siteUrlFor(slug) {
@@ -670,7 +898,7 @@
           "a",
           {
             class: "btn",
-            href: IS_LOCAL ? "/work.html" : CFG.siteUrl + "/work.html",
+            href: viewSiteHref(),
             target: "_blank",
             rel: "noopener",
           },
@@ -746,17 +974,33 @@
         }),
       ]),
       el("div", { class: "sidebar__list" }, [
-        el("button", { class: "collection is-active" }, [
-          el("span", { html: ICONS.database }),
-          el("span", { text: "Projekti" }),
-          el("span", { class: "collection__count", text: String(state.items.length) }),
-        ]),
-        el("button", { class: "collection collection--add", onclick: createItem }, [
-          el("span", { html: ICONS.plus }),
-          el("span", { text: "Add..." }),
-        ]),
+        collectionButton("work", "Projekti", ICONS.database, state.items.length),
+        collectionButton("pages", "Stranice", ICONS.page, state.pages.length),
+        state.collection === "work"
+          ? el("button", { class: "collection collection--add", onclick: createItem }, [
+              el("span", { html: ICONS.plus }),
+              el("span", { text: "Add..." }),
+            ])
+          : null,
       ]),
     ]);
+  }
+
+  function collectionButton(name, label, icon, count) {
+    return el(
+      "button",
+      {
+        class: "collection" + (state.collection === name ? " is-active" : ""),
+        onclick: function () {
+          switchCollection(name);
+        },
+      },
+      [
+        el("span", { html: icon }),
+        el("span", { text: label }),
+        el("span", { class: "collection__count", "data-count": name, text: String(count) }),
+      ]
+    );
   }
 
   function renderMain() {
@@ -765,6 +1009,24 @@
   }
 
   function renderToolbar() {
+    // Stranice se ne dodaju, ne brisu i nemaju status — toolbar im je samo pretraga.
+    if (state.collection === "pages") {
+      return el("div", { class: "toolbar" }, [
+        el("div", { class: "toolbar__search" }, [
+          el("input", {
+            type: "search",
+            placeholder: "Search items...",
+            value: state.query,
+            oninput: function (event) {
+              state.query = event.target.value;
+              refreshTable();
+            },
+          }),
+        ]),
+        el("div", { class: "toolbar__spacer" }),
+      ]);
+    }
+
     return el("div", { class: "toolbar" }, [
       el("button", { class: "icon-btn", title: "Novi projekat", onclick: createItem }, [
         el("span", { html: ICONS.plus }),
@@ -822,11 +1084,69 @@
     var old = main && main.querySelector(".table-wrap");
     if (!old) return render();
     main.replaceChild(renderTable(), old);
-    var counter = root.querySelector(".collection__count");
-    if (counter) counter.textContent = String(state.items.length);
+    var work = root.querySelector('[data-count="work"]');
+    if (work) work.textContent = String(state.items.length);
+    var pages = root.querySelector('[data-count="pages"]');
+    if (pages) pages.textContent = String(state.pages.length);
+  }
+
+  function renderPagesTable() {
+    var rows = visibleItems();
+
+    var head = el("thead", {}, [
+      el("tr", {}, [
+        el("th", { class: "col-title", text: "Page" }),
+        el("th", { class: "col-slug", text: "URL" }),
+        el("th", { class: "col-year", text: "Slike" }),
+        el("th", { class: "col-text", text: "Tekst" }),
+      ]),
+    ]);
+
+    var body = el(
+      "tbody",
+      {},
+      rows.map(function (page) {
+        var fields = flatFields(page);
+        var images = fields.filter(function (field) {
+          return field.kind === "image" || field.kind === "bg";
+        });
+        var texts = fields.filter(function (field) {
+          return field.kind !== "image" && field.kind !== "bg";
+        });
+        var missing = fields.filter(function (field) {
+          return field.missing;
+        }).length;
+        // U pregledu stoji tekst, ne markup — inace kolona pokazuje <em> i <br>.
+        var preview = texts.length
+          ? decodeHtml(String(texts[0].value).replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim()
+          : "";
+
+        return el("tr", {}, [
+          el("td", {
+            class: "col-title cell-title",
+            text: page.title,
+            onclick: function () {
+              openItem(page.key);
+            },
+          }),
+          el("td", { class: "col-slug", text: page.url }),
+          el("td", { class: "col-year", text: images.length + " slika" }),
+          el("td", {
+            class: "col-text",
+            text: missing ? missing + " polja bez sidra u stranici" : preview || "—",
+          }),
+        ]);
+      })
+    );
+
+    return el("div", { class: "table-wrap" }, [
+      el("table", { class: "table" }, [head, body]),
+      rows.length ? null : el("div", { class: "empty", text: "Nijedna stranica ne odgovara pretrazi." }),
+    ]);
   }
 
   function renderTable() {
+    if (state.collection === "pages") return renderPagesTable();
     var rows = visibleItems();
 
     var head = el("thead", {}, [
@@ -1050,7 +1370,9 @@
     state.selectedKey = key;
     state.draft = JSON.parse(JSON.stringify(item));
     state.original = JSON.parse(JSON.stringify(item));
-    while (state.draft.disciplines.length < 3) state.draft.disciplines.push("");
+    if (state.draft.kind !== "page") {
+      while (state.draft.disciplines.length < 3) state.draft.disciplines.push("");
+    }
     state.dirty = false;
     state.view = "detail";
     render();
@@ -1119,6 +1441,7 @@
 
   function renderEditor() {
     var draft = state.draft;
+    if (draft.kind === "page") return renderPageEditor(draft);
     var fields = [];
 
     /* ---------------------------------------------------- osnovno */
@@ -1346,6 +1669,60 @@
     );
 
     return el("div", { class: "editor" }, [el("div", { class: "editor__inner" }, fields)]);
+  }
+
+  // Editor stranice: sekcije iz content/pages.json, polje po polje. Naziv
+  // stranice i URL su samo za orijentaciju — njih panel ne menja.
+  function renderPageEditor(draft) {
+    var fields = [];
+
+    fields.push(sectionRow("Stranica"));
+    fields.push(
+      fieldRow(
+        "Page",
+        el("input", { class: "input", value: draft.title, disabled: true }),
+        CFG.siteUrl.replace(/^https?:\/\//, "").replace(/\/$/, "") + draft.url
+      )
+    );
+
+    draft.groups.forEach(function (group) {
+      fields.push(sectionRow(group.label));
+      group.fields.forEach(function (field) {
+        fields.push(renderPageField(field));
+      });
+    });
+
+    return el("div", { class: "editor" }, [el("div", { class: "editor__inner" }, fields)]);
+  }
+
+  function renderPageField(field) {
+    if (field.missing) {
+      return fieldRow(
+        field.label,
+        el("input", { class: "input", value: "", disabled: true }),
+        'U stranici nema data-cms="' + field.id + '" — polje je iskljuceno dok se sidro ne vrati.'
+      );
+    }
+
+    if (field.kind === "image" || field.kind === "bg") {
+      return fieldRow(field.label, mediaSlot(field, "value", "image"));
+    }
+
+    var rows = field.rows || (field.kind === "html" ? 2 : 0);
+    var onInput = function (event) {
+      field.value = event.target.value;
+      markDirty();
+    };
+
+    var control = rows
+      ? el("textarea", { class: "input input--area", rows: rows, value: field.value, oninput: onInput })
+      : el("input", { class: "input", value: field.value, oninput: onInput });
+
+    return fieldRow(
+      field.label,
+      control,
+      field.kind === "html" ? "Inline markup ostaje kakav jeste — npr. <em>, <br>, <sup>." : null
+    );
   }
 
   function addBlock(type) {
@@ -1628,6 +2005,7 @@
 
   function publishDraft() {
     var draft = state.draft;
+    if (draft.kind === "page") return publishPage(draft);
 
     if (!draft.title.trim()) return toast("Naslov je obavezan.", true);
     if (!draft.slug.trim()) return toast("Slug je obavezan.", true);
@@ -1673,6 +2051,70 @@
         state.saving = false;
         render();
         toast(IS_LOCAL ? "Sacuvano i ponovo izgradjeno." : "Objavljeno. Sajt se gradi.");
+      })
+      .catch(function (err) {
+        console.error(err);
+        state.saving = false;
+        render();
+        toast(err.message, true);
+      });
+  }
+
+  function publishPage(draft) {
+    var before = flatFields(state.original);
+    var changed = flatFields(draft).filter(function (field, index) {
+      return !field.missing && String(field.value) !== String(before[index].value);
+    });
+    if (!changed.length) return toast("Nema izmena za objavu.", true);
+
+    var uploads = changed
+      .filter(function (field) {
+        return state.staged[field.value];
+      })
+      .map(function (field) {
+        return { path: field.value, base64: state.staged[field.value].base64 };
+      });
+
+    state.saving = true;
+    render();
+
+    // Stranica se cita ponovo pred upis. Ako ju je neko u medjuvremenu menjao,
+    // upisuje se preko sveze verzije umesto preko one ucitane pri pokretanju.
+    state.store
+      .readFile(draft.file)
+      .then(function (html) {
+        if (html === null) throw new Error("Ne mogu da procitam " + draft.file + ".");
+        changed.forEach(function (field) {
+          html = writeSlot(html, field, field.value);
+        });
+
+        var images = changed.filter(function (field) {
+          return field.kind === "image" || field.kind === "bg";
+        }).length;
+        var what = [];
+        if (changed.length - images) what.push("tekst");
+        if (images) what.push(images + " slika");
+
+        var files = uploads.concat([{ path: draft.file, base64: b64encode(html) }]);
+        return state.store
+          .commit("CMS: " + draft.title + " — " + what.join(" + "), files)
+          .then(function () {
+            return html;
+          });
+      })
+      .then(function (html) {
+        state.pageSources[draft.file] = html;
+        var index = state.pages.findIndex(function (page) {
+          return page.key === draft.key;
+        });
+        var saved = JSON.parse(JSON.stringify(draft));
+        if (index >= 0) state.pages[index] = saved;
+
+        state.original = JSON.parse(JSON.stringify(draft));
+        state.dirty = false;
+        state.saving = false;
+        render();
+        toast(IS_LOCAL ? "Sacuvano." : "Objavljeno. Sajt se gradi.");
       })
       .catch(function (err) {
         console.error(err);

@@ -159,7 +159,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .stage{position:absolute;inset:0;z-index:0;background:var(--ink)}
 .stage__img{
   position:absolute;inset:-2%;
-  background:url("../assets/hero-bg.jpg") 52% 46%/cover no-repeat;
+  background:var(--hero,url("../assets/hero-bg.jpg")) 52% 46%/cover no-repeat;
   filter:brightness(.19) contrast(1.14) saturate(.55);
   will-change:transform;
 }
