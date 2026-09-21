@@ -36,6 +36,4 @@ blocks:
   - type: plate
     src: assets/uploads/mubgj5ig-sign.jpg
     alt: ''
-  - type: empty
-    label: Image 05
 ---
