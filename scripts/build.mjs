@@ -159,11 +159,16 @@ function renderSlides(projects) {
       const tags = list(p.disciplines)
         .map((t) => `          <li>${esc(t)}</li>`)
         .join("\n");
-      // --img se cita iz css/work.css, pa se putanja racuna od css/ foldera.
+      // Na telefonu je ovo i slika i ulaz u projekat, pa mora da bude pravi
+      // <a> sa pravim <img>-om: pseudo-element ne moze da se klikne, a
+      // url() u custom property-ju se racuna od stylesheet-a koji ga KORISTI.
       const thumb = p.thumb || p.cover || "";
-      const bg = thumb ? ` style="--img:url(../${esc(thumb)})"` : "";
-      return `      <li class="slide" id="${esc(p.slug)}"${bg}>
-        <h2 class="slide__name">${esc(p.title)}</h2>
+      const shot = thumb
+        ? `        <a class="slide__shot" data-xfade="none" href="project-${esc(p.slug)}.html" aria-label="Open ${esc(p.title)}"><img src="${esc(thumb)}" alt="" loading="lazy" decoding="async"></a>
+`
+        : "";
+      return `      <li class="slide" id="${esc(p.slug)}">
+${shot}        <h2 class="slide__name">${esc(p.title)}</h2>
         <ul class="slide__tags slide__tags--plain">
 ${tags}
         </ul>
