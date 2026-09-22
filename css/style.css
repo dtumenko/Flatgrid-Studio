@@ -270,11 +270,20 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .social{
   position:fixed;z-index:70;
   left:var(--pad);bottom:calc(var(--pad) + 78px);
-  display:flex;flex-direction:column;gap:26px;
+  display:flex;flex-direction:column;align-items:center;gap:26px;
 }
 .social a{
+  /* The three marks are drawn to different proportions — the Behance glyph
+     is wide and short, the other two are square — so a row of them aligned
+     on their top edges leaves Behance's foot 4px clear of the other two.
+     Each one gets the same box and sits in the middle of it, which puts all
+     three on a single centreline: down the rail on a desktop, along the
+     foot on a phone. */
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  width:22px;height:18px;
   /* white, as the marks are drawn: they are solid glyphs now, not outlines */
-  display:block;color:var(--paper);
+  color:var(--paper);
   transition:color var(--t-hover) var(--ease-out),
              transform .22s var(--ease-out);
 }
@@ -678,15 +687,37 @@ body.nav-open .social a:hover{color:var(--accent)}
     left:auto;right:calc(var(--pad) - 10px);
     flex-direction:row-reverse;          /* bars nearest the edge */
     gap:10px;padding:13px 10px;          /* 45px tall: a real target */
-    /* it stays fixed, so content scrolls under it — this keeps it legible
-       over whatever happens to be passing beneath */
-    background:rgba(20,20,21,.62);
-    -webkit-backdrop-filter:blur(10px);
-    backdrop-filter:blur(10px);
+    /* legibility comes from the scrim below, not from a plate of its own */
   }
-  .page-sheet .menu{background:rgba(255,255,255,.68)}
-  /* over the open menu it needs neither */
-  body.nav-open .menu{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+  /* A control that holds still while photographs scroll under it has to
+     stay readable over whatever arrives. A plate behind it does that, but
+     it reads as a grey slab pasted onto the page — the edges give it away,
+     and over ink it is lighter than the page it sits on. A scrim down the
+     top of the screen does the same work with nothing to see: it has no
+     edge to notice, it fades out before it reaches the content, and the
+     wordmark on the other side gets the benefit too.
+
+     z-index 59 puts it over the page but under the menu overlay at 60, so
+     it takes itself out of the way when the menu opens. */
+  body::before{
+    content:"";
+    position:fixed;inset:0 0 auto 0;height:120px;z-index:59;
+    pointer-events:none;
+    background:linear-gradient(to bottom,
+      rgba(10,10,11,.78) 0,
+      rgba(10,10,11,.60) 42%,
+      rgba(10,10,11,0) 100%);
+  }
+  /* a sheet is white all the way down, so the scrim is drawn in white —
+     and a project page turns to paper as the cover scrolls past, which is
+     the same moment the chrome takes its `on-paper` class */
+  .page-sheet::before,
+  body:has(.menu.on-paper)::before{
+    background:linear-gradient(to bottom,
+      rgba(255,255,255,.88) 0,
+      rgba(255,255,255,.70) 42%,
+      rgba(255,255,255,0) 100%);
+  }
 
   /* The wordmark scrolls away, which is what was asked for — but it is also
      the only way home, and the menu carries no Home item. So it comes back,
@@ -698,7 +729,9 @@ body.nav-open .social a:hover{color:var(--accent)}
     bottom:calc(var(--pad) + 46px);
     flex-direction:row;gap:6px;
   }
-  .social a{padding:12px 7px;margin:-12px -7px}
+  /* the target a thumb aims at, laid over the mark rather than around it:
+     padding would eat into the box, since everything here is border-box */
+  .social a::after{content:"";position:absolute;inset:-13px -8px}
   .statement{
     left:var(--pad);right:var(--pad);padding-left:0;
     bottom:calc(var(--pad) + 122px);
