@@ -6,7 +6,21 @@
    ============================================================= */
 
 .page-work{
-  overflow-x:hidden;
+  /* The reset closes the body: height:100% with overflow:hidden. That
+     propagates to the viewport, and the only reason the desktop ever
+     scrolled is that Lenis moves it programmatically — `overflow:hidden`
+     blocks the finger, not the script. Lenis is off on touch, so a phone
+     had nothing to translate a swipe into and the page could not move at
+     all. `.page-dark` and `.page-project` both open the body; this one was
+     the only page left closed.
+
+     overflow-x is `clip` rather than `hidden` on purpose: `hidden` on one
+     axis forces the other to `auto`, which would make the body its own
+     scroll container and stop it propagating to the viewport — the same
+     lock by another route. `clip` leaves the vertical axis visible. */
+  height:auto;
+  overflow-x:clip;
+  overflow-y:visible;
   background:var(--ink);
   /* the words start clear of the rail control, which keeps the left edge */
   /* breathing room between the end of a line and the frame */
