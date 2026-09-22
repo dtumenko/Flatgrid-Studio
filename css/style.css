@@ -722,7 +722,15 @@ body.nav-open .social a:hover{color:var(--accent)}
   .tick:nth-child(3),
   .nav__grid span:nth-child(3),
   .nav__panels i:nth-child(4){display:none}
-  .nav__list li{font-size:clamp(28px,8.8vw,42px)}
+  .nav__list li{
+    font-size:clamp(32px,10.4vw,48px);
+    /* The desktop stack hands the descender padding straight back as a
+       negative margin, which leaves consecutive lines sitting 9px inside
+       one another. A phone has the room to let that padding stand and add
+       a little besides: five items at this size still take well under half
+       the screen. */
+    margin-bottom:.12em;
+  }
 
   /* clear of the rail control, which now sits in that corner */
   .rule--head{top:calc(var(--pad) + 44px);right:var(--pad)}
@@ -734,13 +742,16 @@ body.nav-open .social a:hover{color:var(--accent)}
      sized to its own words. */
   .cta{
     top:auto;right:auto;
-    /* the mirror of the desktop treatment: there it fills the top-right
-       cell outright, here the bottom-left one — page edge on one side,
-       the first column rule on the other */
-    left:0;bottom:calc(var(--pad) + 34px);
-    width:var(--col);height:auto;
+    /* It starts where the words above it start, rather than running off
+       the edge of the screen. It cannot also stop on the first column
+       rule: from the text margin to that rule is 109px, and the label,
+       arrow, gap and padding need 120px. So it is sized to its own words
+       instead — the left edge is the one that has to line up. */
+    left:var(--pad);bottom:calc(var(--pad) + 34px);
+    width:max-content;height:auto;
     padding:15px var(--pad);
     gap:8px;
+    white-space:nowrap;
   }
   .cta__title{font-size:14px}
   .js .cta{transform-origin:left center}
