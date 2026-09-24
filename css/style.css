@@ -308,83 +308,25 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   bottom:clamp(96px,15vh,168px);
 }
 
-.eyebrow{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:clamp(16px,1.8vh,26px);
-  font-size:11px;font-weight:500;
-  letter-spacing:.16em;text-transform:uppercase;
-  color:rgba(251,248,243,.62);
-}
-.eyebrow__idx{color:var(--accent);font-variant-numeric:tabular-nums}
-.eyebrow::after{
-  content:"";flex:0 0 46px;height:1px;background:var(--line-2);
-}
-
 .headline{
   margin:0;
   font-family:var(--display);
   font-weight:500;
-  font-size:clamp(30px,4.9vw,96px);
-  line-height:1.015;
+  /* a statement rather than a punchline: seventeen words instead of
+     twelve, so the size comes down to keep it at four lines */
+  font-size:clamp(25px,4vw,72px);
+  line-height:1.06;
   letter-spacing:-.032em;
   color:var(--paper);
 }
 .headline em{font-style:normal;color:var(--accent)}
 
-/* each line is its own mask; the descender room is added back as padding
-   and removed again as margin so the line rhythm is untouched */
-.headline__line{
-  display:block;overflow:hidden;
-  padding-bottom:.16em;margin-bottom:-.16em;
-}
-.headline__line > span{display:block}
-
-.js .headline__line > span{transform:translateY(120%)}
-.js body.is-live .headline__line > span{
-  animation:riseLine 1.05s var(--ease) both;
-}
-.js body.is-live .headline__line:nth-child(1) > span{animation-delay:1.15s}
-.js body.is-live .headline__line:nth-child(2) > span{animation-delay:1.25s}
-.js body.is-live .headline__line:nth-child(3) > span{animation-delay:1.35s}
-@keyframes riseLine{
-  from{transform:translateY(120%)}
-  to  {transform:translateY(0)}
-}
-
-/* ---------- disciplines ---------- */
-/* The block shrink-wraps the discipline line, so the rule above it — five
-   even segments for five disciplines — measures exactly the same width. */
-.services{
-  width:max-content;max-width:100%;
-  margin-top:clamp(22px,3.4vh,44px);
-}
-.services__rule{
-  display:flex;gap:5px;
-  margin-bottom:clamp(10px,1.1vh,14px);
-}
-.services__rule i{
-  flex:1 1 0;height:1px;background:var(--line-2);
-  animation:seg 8s var(--ease-io) infinite;
-}
-.services__rule i:nth-child(1){animation-delay:0s}
-.services__rule i:nth-child(2){animation-delay:1.6s}
-.services__rule i:nth-child(3){animation-delay:3.2s}
-.services__rule i:nth-child(4){animation-delay:4.8s}
-.services__rule i:nth-child(5){animation-delay:6.4s}
-@keyframes seg{
-  0%,11%  {background:var(--accent)}
-  19%,100%{background:var(--line-2)}
-}
-
-.services__list{
-  display:flex;flex-wrap:wrap;
-  font-size:clamp(10.5px,.72vw,12.5px);
-  font-weight:400;letter-spacing:.13em;text-transform:uppercase;
-  color:rgba(251,248,243,.68);
-}
-.services__list li{white-space:nowrap}
-.services__list li:not(:last-child)::after{
-  content:"/";margin:0 clamp(8px,.8vw,12px);color:rgba(251,248,243,.28);
+.lede{
+  margin:clamp(18px,2.4vh,34px) 0 0;
+  max-width:52ch;
+  font-size:clamp(13px,1.02vw,16.5px);
+  line-height:1.58;
+  color:rgba(251,248,243,.72);
 }
 
 /* =============================================================
@@ -735,7 +677,7 @@ body.nav-open .social a:hover{color:var(--accent)}
 
   .social{
     left:auto;right:var(--pad);
-    bottom:calc(var(--pad) + 46px);
+    bottom:calc(var(--pad) + 96px);
     flex-direction:row;gap:6px;
   }
   /* the target a thumb aims at, laid over the mark rather than around it:
@@ -743,11 +685,10 @@ body.nav-open .social a:hover{color:var(--accent)}
   .social a::after{content:"";position:absolute;inset:-13px -8px}
   .statement{
     left:var(--pad);right:var(--pad);padding-left:0;
-    bottom:calc(var(--pad) + 122px);
+    bottom:calc(var(--pad) + 176px);
   }
   .nav__list{left:var(--pad)}
-  .headline{font-size:clamp(32px,6.4vw,58px)}
-  .services__list{font-size:11px}
+  .headline{font-size:clamp(27px,5.2vw,52px)}
   .status__item--mid{display:none}
 
   /* the mark needs more of a narrow screen to stay legible */
@@ -789,7 +730,10 @@ body.nav-open .social a:hover{color:var(--accent)}
        rule: from the text margin to that rule is 109px, and the label,
        arrow, gap and padding need 120px. So it is sized to its own words
        instead — the left edge is the one that has to line up. */
-    left:var(--pad);bottom:calc(var(--pad) + 34px);
+    /* 34px above the foot put this inside the browser's own bottom bar,
+       which is about 50px tall and swallows the tap. The whole bottom
+       stack — words, button, marks — moves up together. */
+    left:var(--pad);bottom:calc(var(--pad) + 104px);
     width:max-content;height:auto;
     padding:15px var(--pad);
     gap:8px;
@@ -801,12 +745,11 @@ body.nav-open .social a:hover{color:var(--accent)}
   /* the aphorisms have no column left to sit in: at this width they were
      printing straight over the wordmark */
   .note{display:none}
-  .headline{font-size:clamp(29px,7.6vw,44px);letter-spacing:-.025em}
-  .statement{bottom:calc(var(--pad) + 128px)}
+  .headline{font-size:clamp(25px,7vw,40px);letter-spacing:-.025em}
+  .lede{font-size:13px;max-width:none}
+  .statement{bottom:calc(var(--pad) + 198px)}
   .nav__list{left:var(--pad);bottom:calc(var(--pad) + 38px)}
-  .services__list{font-size:10px;letter-spacing:.1em}
-  .services__list li:not(:last-child)::after{margin:0 8px}
-  .social{bottom:calc(var(--pad) + 44px)}
+  .social{bottom:calc(var(--pad) + 114px)}
   .rule--foot{bottom:calc(var(--pad) + 28px)}
   .status{font-size:9.5px;letter-spacing:.1em}
   /* full width of the column on a phone — the easiest possible tap target */
@@ -818,10 +761,11 @@ body.nav-open .social a:hover{color:var(--accent)}
 
 /* short viewports (landscape phones) */
 @media (max-height:560px){
-  .statement{bottom:calc(var(--pad) + 96px)}
-  .headline{font-size:clamp(26px,4.4vw,40px)}
-  .services{margin-top:16px}
-  .eyebrow{margin-bottom:12px}
+  .statement{bottom:calc(var(--pad) + 156px)}
+  .cta{bottom:calc(var(--pad) + 76px)}
+  .social{bottom:calc(var(--pad) + 86px)}
+  .headline{font-size:clamp(23px,4.4vw,36px)}
+  .lede{margin-top:14px}
 }
 
 /* =============================================================
@@ -836,13 +780,11 @@ body.nav-open .social a:hover{color:var(--accent)}
   .js .rule,
   .js body.is-live .rule,
   .js .stage__img,
-  .js body.is-live .stage__img,
-  .js .headline__line > span,
-  .js body.is-live .headline__line > span{
+  .js body.is-live .stage__img{
     animation:none!important;
     opacity:1;transform:none;clip-path:none;
   }
-  .stage__grain,.dot,.services__rule i{animation:none}
+  .stage__grain,.dot{animation:none}
   *,*::before,*::after{transition-duration:.01ms!important}
 }
 
