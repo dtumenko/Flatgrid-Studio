@@ -280,13 +280,22 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
      three on a single centreline: down the rail on a desktop, along the
      foot on a phone. */
   position:relative;
-  display:flex;align-items:center;justify-content:center;
+  /* flex-end, not centre: the Behance glyph is 13px tall against two 17px
+     squares, so centring left its foot 2px above theirs. They line up on
+     the one edge that reads — the bottom. */
+  display:flex;align-items:flex-end;justify-content:center;
   width:22px;height:18px;
   /* white, as the marks are drawn: they are solid glyphs now, not outlines */
   color:var(--paper);
   transition:color var(--t-hover) var(--ease-out),
              transform .22s var(--ease-out);
 }
+/* An SVG clips to its own viewport, and the Behance artwork fills its
+   viewBox exactly — 0 to 24 across, 4.5 to 19.5 down, not a unit of slack
+   on any side. At 20.8px wide that clip shaves the antialiased edge and
+   the mark reads as cut off. Nothing is drawn outside the box; this only
+   stops the box from cropping it. */
+.social svg{overflow:visible}
 .social a:hover{color:var(--accent);transform:translateX(3px)}
 
 /* =============================================================
