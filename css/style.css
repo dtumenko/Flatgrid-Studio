@@ -317,10 +317,15 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   font-family:var(--display);
   font-weight:500;
   /* Each line is a mask of its own, so a line that outgrows the measure
-     wraps inside it and the entrance breaks with it. The longest of the
-     three sets the ceiling: at 69px it fills 99% of the measure and at
-     70px it wraps. 4.55vw sits at 95%, clear of that edge. */
-  font-size:clamp(24px,4.55vw,78px);
+     wraps inside it and the entrance breaks with it.
+
+     Neue Haas is not served with the site, only used where it happens to
+     be installed, so the size cannot be set against it: on a machine
+     without it the stack falls to Helvetica Neue or Roboto, which run
+     8-10% wider. At 65px the longest line measured 94% in Neue Haas but
+     103% in Helvetica — wrapping for almost every visitor. 4.1vw is set
+     against the widest of those instead: 93% there, 85% in Neue Haas. */
+  font-size:clamp(22px,4vw,68px);
   line-height:1.06;
   letter-spacing:-.032em;
   color:var(--paper);
@@ -357,7 +362,10 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   margin:clamp(18px,2.4vh,34px) 0 0;
   font-family:var(--display);
   font-weight:400;
-  font-size:clamp(13px,1.11vw,22px);
+  /* Same reasoning, and the ceiling matters as much as the slope: the
+     headline stops growing at 70px while this would have kept going, so
+     past that width it overran the line above it. Capped in step. */
+  font-size:clamp(12px,1.01vw,17px);
   line-height:1.5;
   letter-spacing:0;
   color:var(--paper);
@@ -709,14 +717,9 @@ body.nav-open .social a:hover{color:var(--accent)}
      pinned, for as long as the menu is open. */
   body.nav-open .logo{position:fixed}
 
-  .social{
-    left:auto;right:var(--pad);
-    bottom:calc(var(--pad) + 96px);
-    flex-direction:row;gap:6px;
-  }
-  /* the target a thumb aims at, laid over the mark rather than around it:
-     padding would eat into the box, since everything here is border-box */
-  .social a::after{content:"";position:absolute;inset:-13px -8px}
+  /* Off the phone altogether — the hero and the menu page alike, since
+     the one element serves both. The links live in the contact form. */
+  .social{display:none}
   .statement{
     left:var(--pad);right:var(--pad);padding-left:0;
     bottom:calc(var(--pad) + 176px);
@@ -743,10 +746,9 @@ body.nav-open .social a:hover{color:var(--accent)}
     font-size:clamp(32px,10.4vw,48px);
     /* The desktop stack hands the descender padding straight back as a
        negative margin, which leaves consecutive lines sitting 9px inside
-       one another. A phone has the room to let that padding stand and add
-       a little besides: five items at this size still take well under half
-       the screen. */
-    margin-bottom:.12em;
+       one another. Letting that padding stand is enough on its own; the
+       extra .12em on top of it was too much air. */
+    margin-bottom:-.06em;
   }
 
   /* clear of the rail control, which now sits in that corner */
@@ -783,13 +785,14 @@ body.nav-open .social a:hover{color:var(--accent)}
      28px is the last size that holds them — 29px falls to four with a 29%
      line left hanging. The floor is 23px so a 320px screen keeps the ratio
      rather than tipping over with it. */
-  /* same ceiling, measured here: 32px is the last size the longest line
-     holds, 33px wraps it inside its mask. 8vw sits at 30px. */
-  .headline{font-size:clamp(22px,8vw,46px);letter-spacing:-.025em}
+  /* A phone has no Neue Haas at all, so this is the size that matters.
+     At 30px the longest line ran 92% in Neue Haas but 105% in Helvetica
+     Neue and 101% in Roboto — which is why "grow" dropped to a line of
+     its own. 7.05vw holds 93% in the widest of them. */
+  .headline{font-size:clamp(20px,7.05vw,40px);letter-spacing:-.025em}
   .lede{font-size:13px;max-width:none}
   .statement{bottom:calc(var(--pad) + 198px)}
   .nav__list{left:var(--pad);bottom:calc(var(--pad) + 38px)}
-  .social{bottom:calc(var(--pad) + 114px)}
   .rule--foot{bottom:calc(var(--pad) + 28px)}
   .status{font-size:9.5px;letter-spacing:.1em}
   /* full width of the column on a phone — the easiest possible tap target */
@@ -803,7 +806,7 @@ body.nav-open .social a:hover{color:var(--accent)}
 @media (max-height:560px){
   .statement{bottom:calc(var(--pad) + 156px)}
   .cta{bottom:calc(var(--pad) + 76px)}
-  .social{bottom:calc(var(--pad) + 86px)}
+
   .headline{font-size:clamp(23px,4.4vw,36px)}
   .lede{margin-top:14px}
 }
