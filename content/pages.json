@@ -32,7 +32,9 @@
       {
         "label": "Izjava",
         "fields": [
-          { "id": "home.headline", "label": "Naslov", "kind": "html", "rows": 3 },
+          { "id": "home.headline_1", "label": "Naslov — prvi red", "kind": "text" },
+          { "id": "home.headline_2", "label": "Naslov — drugi red", "kind": "text" },
+          { "id": "home.headline_3", "label": "Naslov — treci red", "kind": "html" },
           { "id": "home.lede", "label": "Tekst ispod naslova", "kind": "text", "rows": 3 }
         ]
       },

@@ -316,20 +316,36 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   margin:0;
   font-family:var(--display);
   font-weight:500;
-  /* The breaks in this sentence are the author's, not the browser's: a
-     greedy wrap cannot make them, because a line wide enough to hold
-     "Design studio building brand recognition" would pull "through
-     distinctive" up beside it. So the measure only has to hold the first
-     line, and that first line is what sets the size: at 46.5px it fills
-     99% of three columns and at 47px it wraps, taking the whole shape
-     with it. 3.1vw sits at 95%, far enough off that edge to survive a
-     different render. */
-  font-size:clamp(23px,3.1vw,62px);
+  /* Each line is a mask of its own, so a line that outgrows the measure
+     wraps inside it and the entrance breaks with it. The longest of the
+     three sets the ceiling: at 69px it fills 99% of the measure and at
+     70px it wraps. 4.55vw sits at 95%, clear of that edge. */
+  font-size:clamp(24px,4.55vw,78px);
   line-height:1.06;
   letter-spacing:-.032em;
   color:var(--paper);
 }
 .headline em{font-style:normal;color:var(--accent)}
+
+/* each line is its own mask; the descender room is added back as padding
+   and removed again as margin so the line rhythm is untouched */
+.headline__line{
+  display:block;overflow:hidden;
+  padding-bottom:.16em;margin-bottom:-.16em;
+}
+.headline__line > span{display:block}
+
+.js .headline__line > span{transform:translateY(120%)}
+.js body.is-live .headline__line > span{
+  animation:riseLine 1.05s var(--ease) both;
+}
+.js body.is-live .headline__line:nth-child(1) > span{animation-delay:1.15s}
+.js body.is-live .headline__line:nth-child(2) > span{animation-delay:1.25s}
+.js body.is-live .headline__line:nth-child(3) > span{animation-delay:1.35s}
+@keyframes riseLine{
+  from{transform:translateY(120%)}
+  to  {transform:translateY(0)}
+}
 
 .lede{
   /* Same face as the headline, at Roman. It had been set in the UI face
@@ -767,15 +783,9 @@ body.nav-open .social a:hover{color:var(--accent)}
      28px is the last size that holds them — 29px falls to four with a 29%
      line left hanging. The floor is 23px so a 320px screen keeps the ratio
      rather than tipping over with it. */
-  /* The hand breaks are for a measure three columns wide. Here the first
-     line alone would overrun it, so they come out and the sentence wraps
-     on its own again. */
-  .headline br{display:none}
-  /* 28px is the last size that holds three lines here — 29px falls to
-     four with a 29% line hanging. "brand recognition" is tied with a
-     non-breaking space, or the wrap splits it at every usable size and
-     the accent ends up half on one line and half on the next. */
-  .headline{font-size:clamp(22px,7.4vw,40px);letter-spacing:-.025em}
+  /* same ceiling, measured here: 32px is the last size the longest line
+     holds, 33px wraps it inside its mask. 8vw sits at 30px. */
+  .headline{font-size:clamp(22px,8vw,46px);letter-spacing:-.025em}
   .lede{font-size:13px;max-width:none}
   .statement{bottom:calc(var(--pad) + 198px)}
   .nav__list{left:var(--pad);bottom:calc(var(--pad) + 38px)}
@@ -810,7 +820,8 @@ body.nav-open .social a:hover{color:var(--accent)}
   .js .rule,
   .js body.is-live .rule,
   .js .stage__img,
-  .js body.is-live .stage__img{
+  .js body.is-live .stage__img,
+  .js body.is-live .headline__line > span{
     animation:none!important;
     opacity:1;transform:none;clip-path:none;
   }
