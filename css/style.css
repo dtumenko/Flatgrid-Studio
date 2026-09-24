@@ -303,8 +303,12 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
    ============================================================= */
 .statement{
   position:absolute;z-index:4;
+  /* two columns exactly, first rule to third: the statement used to run to
+     20px short of the fifth rule, so its right edge landed inside a column
+     instead of on a line. Both edges sit on the grid now, and the headline
+     and the line under it share the one measure. */
   left:calc(var(--col) * 1);
-  right:calc(var(--col) + 20px);
+  right:calc(var(--col) * 3);
   bottom:clamp(96px,15vh,168px);
 }
 
@@ -312,9 +316,12 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   margin:0;
   font-family:var(--display);
   font-weight:500;
-  /* a statement rather than a punchline: seventeen words instead of
-     twelve, so the size comes down to keep it at four lines */
-  font-size:clamp(25px,4vw,72px);
+  /* Sized to the two-column measure rather than to the screen. At 4vw the
+     sentence took four lines and broke "brand recognition" across two of
+     them, leaving the accent split and a 65% line stranded in the middle.
+     A step down sets it in three — 476, 442, 338 of a 480 measure, a rag
+     that tapers — and keeps the phrase whole. */
+  font-size:clamp(25px,3.05vw,56px);
   line-height:1.06;
   letter-spacing:-.032em;
   color:var(--paper);
@@ -322,10 +329,16 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .headline em{font-style:normal;color:var(--accent)}
 
 .lede{
+  /* no measure of its own: it fills the same two columns as the headline,
+     so the block reads as one shape rather than a heading with a shorter
+     paragraph tucked under it */
   margin:clamp(18px,2.4vh,34px) 0 0;
-  max-width:52ch;
-  font-size:clamp(13px,1.02vw,16.5px);
-  line-height:1.58;
+  /* 19px against the headline's 44px. Measured across the two-column
+     measure: at 17px the second line fell to 63% of the first, at 22px it
+     broke to three with an 11% orphan. This sits at 94/81. */
+  font-size:clamp(14px,1.32vw,21px);
+  line-height:1.52;
+  letter-spacing:-.004em;
   color:rgba(251,248,243,.72);
 }
 
@@ -745,7 +758,10 @@ body.nav-open .social a:hover{color:var(--accent)}
   /* the aphorisms have no column left to sit in: at this width they were
      printing straight over the wordmark */
   .note{display:none}
-  .headline{font-size:clamp(25px,7vw,40px);letter-spacing:-.025em}
+  /* 8vw, not 7: at 26px the sentence set 84/100/38 of the measure — a
+     stranded third line. This sets 97/90/69, the same taper the desktop
+     gets, and keeps "brand recognition" on one line. */
+  .headline{font-size:clamp(27px,8vw,44px);letter-spacing:-.025em}
   .lede{font-size:13px;max-width:none}
   .statement{bottom:calc(var(--pad) + 198px)}
   .nav__list{left:var(--pad);bottom:calc(var(--pad) + 38px)}
