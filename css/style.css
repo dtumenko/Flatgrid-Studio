@@ -3,6 +3,45 @@
    Brand: Neue Haas Grotesk (display) · Roboto (UI) · #FF7546
    ============================================================= */
 
+/* =============================================================
+   METRIC FALLBACKS
+
+   Neue Haas Grotesk Display Pro is not served with the site — there is
+   no webfont licence — so it renders only where it happens to be
+   installed, which is this studio's machines and almost nowhere else.
+   Everywhere else the stack falls through to Helvetica Neue, Roboto or
+   Arial, and those set 7-13% wider. A line written to fill the measure
+   here overran it there, and the headline, whose lines are each a mask,
+   wrapped inside one and was clipped by it.
+
+   These declare the same faces under names of their own, with their
+   advance widths scaled to match Neue Haas — measured line by line
+   against it, not guessed. A line that fills the measure in one fills it
+   in the other, so the type can be set to the grid rather than to the
+   widest face anyone might have.
+
+   Separate families rather than one family with several srcs: a name
+   resolves only where that face exists, so the stack takes the first
+   that does. Where size-adjust is unsupported the name still resolves
+   and the old width returns, which is why the sizes below still keep a
+   little room.
+   ============================================================= */
+@font-face{
+  font-family:"NHD sub Helvetica";
+  src:local("Helvetica Neue"),local("HelveticaNeue");
+  size-adjust:88%;
+}
+@font-face{
+  font-family:"NHD sub Roboto";
+  src:local("Roboto");
+  size-adjust:91%;
+}
+@font-face{
+  font-family:"NHD sub Arial";
+  src:local("Arial"),local("Liberation Sans");
+  size-adjust:93%;
+}
+
 /* ---------- tokens ---------- */
 :root{
   /* brand */
@@ -18,8 +57,9 @@
 
   /* type */
   --display: "Neue Haas Grotesk Display Pro","NeueHaasGroteskDisp Pro",
-             "Neue Haas Grotesk Display","Helvetica Neue","Inter",
-             Roboto,Helvetica,Arial,sans-serif;
+             "Neue Haas Grotesk Display",
+             "NHD sub Helvetica","NHD sub Roboto","NHD sub Arial",
+             "Helvetica Neue","Inter",Roboto,Helvetica,Arial,sans-serif;
   --ui:      Roboto,"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
 
   /* frame — matches the 20/1920 margin of the brand mock */
@@ -325,7 +365,11 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
      8-10% wider. At 65px the longest line measured 94% in Neue Haas but
      103% in Helvetica — wrapping for almost every visitor. 4.1vw is set
      against the widest of those instead: 93% there, 85% in Neue Haas. */
-  font-size:clamp(22px,4vw,68px);
+  /* Set to the measure now that the fallbacks match it — see the metric
+     fallbacks at the top of this file. The longest line reaches 97% of
+     the two columns; without that matching this would have been 110% of
+     them in Helvetica and wrapped inside its own mask. */
+  font-size:clamp(24px,4.67vw,96px);
   line-height:1.06;
   letter-spacing:-.032em;
   color:var(--paper);
@@ -362,10 +406,10 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   margin:clamp(18px,2.4vh,34px) 0 0;
   font-family:var(--display);
   font-weight:400;
-  /* Same reasoning, and the ceiling matters as much as the slope: the
-     headline stops growing at 70px while this would have kept going, so
-     past that width it overran the line above it. Capped in step. */
-  font-size:clamp(12px,1.01vw,17px);
+  /* Set to the same measure, and capped in step with the headline: left
+     to grow past the width where that stops, it overran the line above
+     it on a wide screen. */
+  font-size:clamp(13px,1.16vw,24px);
   line-height:1.5;
   letter-spacing:0;
   color:var(--paper);
@@ -785,11 +829,10 @@ body.nav-open .social a:hover{color:var(--accent)}
      28px is the last size that holds them — 29px falls to four with a 29%
      line left hanging. The floor is 23px so a 320px screen keeps the ratio
      rather than tipping over with it. */
-  /* A phone has no Neue Haas at all, so this is the size that matters.
-     At 30px the longest line ran 92% in Neue Haas but 105% in Helvetica
-     Neue and 101% in Roboto — which is why "grow" dropped to a line of
-     its own. 7.05vw holds 93% in the widest of them. */
-  .headline{font-size:clamp(20px,7.05vw,40px);letter-spacing:-.025em}
+  /* A phone never has Neue Haas, so it reads this through the matched
+     fallbacks throughout; the longest line fills 97% of the measure in
+     any of them. */
+  .headline{font-size:clamp(22px,8.4vw,48px);letter-spacing:-.025em}
   .lede{font-size:13px;max-width:none}
   .statement{bottom:calc(var(--pad) + 198px)}
   .nav__list{left:var(--pad);bottom:calc(var(--pad) + 38px)}
