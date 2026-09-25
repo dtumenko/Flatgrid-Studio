@@ -3,45 +3,6 @@
    Brand: Neue Haas Grotesk (display) · Roboto (UI) · #FF7546
    ============================================================= */
 
-/* =============================================================
-   METRIC FALLBACKS
-
-   Neue Haas Grotesk Display Pro is not served with the site — there is
-   no webfont licence — so it renders only where it happens to be
-   installed, which is this studio's machines and almost nowhere else.
-   Everywhere else the stack falls through to Helvetica Neue, Roboto or
-   Arial, and those set 7-13% wider. A line written to fill the measure
-   here overran it there, and the headline, whose lines are each a mask,
-   wrapped inside one and was clipped by it.
-
-   These declare the same faces under names of their own, with their
-   advance widths scaled to match Neue Haas — measured line by line
-   against it, not guessed. A line that fills the measure in one fills it
-   in the other, so the type can be set to the grid rather than to the
-   widest face anyone might have.
-
-   Separate families rather than one family with several srcs: a name
-   resolves only where that face exists, so the stack takes the first
-   that does. Where size-adjust is unsupported the name still resolves
-   and the old width returns, which is why the sizes below still keep a
-   little room.
-   ============================================================= */
-@font-face{
-  font-family:"NHD sub Helvetica";
-  src:local("Helvetica Neue"),local("HelveticaNeue");
-  size-adjust:88%;
-}
-@font-face{
-  font-family:"NHD sub Roboto";
-  src:local("Roboto");
-  size-adjust:91%;
-}
-@font-face{
-  font-family:"NHD sub Arial";
-  src:local("Arial"),local("Liberation Sans");
-  size-adjust:93%;
-}
-
 /* ---------- tokens ---------- */
 :root{
   /* brand */
@@ -56,11 +17,19 @@
   --muted:    rgba(251,248,243,.52);
 
   /* type */
-  --display: "Neue Haas Grotesk Display Pro","NeueHaasGroteskDisp Pro",
-             "Neue Haas Grotesk Display",
-             "NHD sub Helvetica","NHD sub Roboto","NHD sub Arial",
-             "Helvetica Neue","Inter",Roboto,Helvetica,Arial,sans-serif;
-  --ui:      Roboto,"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+  /* Served from the studio's Adobe Fonts kit (project zrm5xvp), so every
+     visitor gets the real face rather than only the machines that have it
+     installed. The local names stay behind it as a net for the moment the
+     kit itself fails to load.
+
+     The kit's weights are not the usual ones: Display Roman is 500 and
+     Display Medium is 600, Text Roman is 400. A request for 400 on the
+     display family resolves up to Roman, which is why the 400s scattered
+     through these stylesheets still land on the right cut. */
+  --display: "neue-haas-grotesk-display","Neue Haas Grotesk Display Pro",
+             "NeueHaasGroteskDisp Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --ui:      "neue-haas-grotesk-text","Neue Haas Grotesk Text Pro",
+             "Helvetica Neue",Helvetica,Arial,sans-serif;
 
   /* frame — matches the 20/1920 margin of the brand mock */
   --pad:  clamp(18px, 1.15vw, 26px);
